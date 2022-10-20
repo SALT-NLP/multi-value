@@ -1,0 +1,460 @@
+<QuestionForm xmlns='http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd'>  
+  <Overview>
+    <Title>English Varieties Test</Title>
+    <FormattedContent><![CDATA[
+    <h1>Instructions</h1>
+    
+    <p>Please answer the following questions honestly. We are trying to understand the dialect(s) of English that you speak. Please do not try to pretend to speak a different dialect. Even if you do not qualify for this round of HITs, you may qualify for the next since we are going to run different HITs for different dialects using the same or similar qualificationss as a filter.</p>
+    ]]></FormattedContent>
+  </Overview>
+
+  <Question>
+      <QuestionIdentifier>q_1</QuestionIdentifier>
+      <DisplayName>Q1</DisplayName>
+      <IsRequired>true</IsRequired>
+      <QuestionContent>
+        <FormattedContent><![CDATA[
+        <p><b>Self-Report:</b></p>
+
+        <p><em>Which of the following best describe the dialect you speak?</em></p>  
+        ]]></FormattedContent>
+      </QuestionContent>
+      <AnswerSpecification>
+        <SelectionAnswer>
+          <StyleSuggestion>radiobutton</StyleSuggestion>
+          <Selections>
+
+            <Selection>
+              <SelectionIdentifier>aboriginal</SelectionIdentifier>
+              <Text>Aboriginal English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>fiji_acrolectal</SelectionIdentifier>
+              <Text>Acrolectal Fiji English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>appalachian</SelectionIdentifier>
+              <Text>Appalachian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>australian</SelectionIdentifier>
+              <Text>Australian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>australian_vernacular</SelectionIdentifier>
+              <Text>Australian Vernacular English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>bahamian</SelectionIdentifier>
+              <Text>Bahamian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>south_african_black</SelectionIdentifier>
+              <Text>Black South African English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>cameroon</SelectionIdentifier>
+              <Text>Cameroon English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>cape_flats</SelectionIdentifier>
+              <Text>Cape Flats English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>channel_islands</SelectionIdentifier>
+              <Text>Channel Islands English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>chicano</SelectionIdentifier>
+              <Text>Chicano English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>colloquial_ae</SelectionIdentifier>
+              <Text>Colloquial American English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>singapore</SelectionIdentifier>
+              <Text>Colloquial Singapore English (Singlish)</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>aave_earlier</SelectionIdentifier>
+              <Text>Earlier African American Vernacular English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>east_anglian</SelectionIdentifier>
+              <Text>East Anglian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>england_n</SelectionIdentifier>
+              <Text>English dialects in the North of England</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>england_se</SelectionIdentifier>
+              <Text>English dialects in the Southeast of England</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>england_sw</SelectionIdentifier>
+              <Text>English dialects in the Southwest of England</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>falkland_islands</SelectionIdentifier>
+              <Text>Falkland Islands English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>ghanaian</SelectionIdentifier>
+              <Text>Ghanaian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>hk</SelectionIdentifier>
+              <Text>Hong Kong English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>indian</SelectionIdentifier>
+              <Text>Indian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>indian_south_african</SelectionIdentifier>
+              <Text>Indian South African English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>irish</SelectionIdentifier>
+              <Text>Irish English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>jamaican</SelectionIdentifier>
+              <Text>Jamaican English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>kenyan</SelectionIdentifier>
+              <Text>Kenyan English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>liberian</SelectionIdentifier>
+              <Text>Liberian Settler English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>malaysian</SelectionIdentifier>
+              <Text>Malaysian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>maltese</SelectionIdentifier>
+              <Text>Maltese English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>manx</SelectionIdentifier>
+              <Text>Manx English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>new_zealand</SelectionIdentifier>
+              <Text>New Zealand English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>newfoundland</SelectionIdentifier>
+              <Text>Newfoundland English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>nigerian</SelectionIdentifier>
+              <Text>Nigerian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>orkney</SelectionIdentifier>
+              <Text>Orkney and Shetland English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>ozark</SelectionIdentifier>
+              <Text>Ozark English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>pakistani</SelectionIdentifier>
+              <Text>Pakistani English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>philippine</SelectionIdentifier>
+              <Text>Philippine English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>fiji_pure</SelectionIdentifier>
+              <Text>Pure Fiji English (basilectal FijiE)</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>aave_rural</SelectionIdentifier>
+              <Text>Rural African American Vernacular English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>scottish</SelectionIdentifier>
+              <Text>Scottish English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>se_american_enclave</SelectionIdentifier>
+              <Text>Southeast American enclave dialects</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>sri_lankan</SelectionIdentifier>
+              <Text>Sri Lankan English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>st_helena</SelectionIdentifier>
+              <Text>St. Helena English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>tanzanian</SelectionIdentifier>
+              <Text>Tanzanian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>tristan_da_cunha</SelectionIdentifier>
+              <Text>Tristan da Cunha English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>ugandan</SelectionIdentifier>
+              <Text>Ugandan English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>aave_urban</SelectionIdentifier>
+              <Text>Urban African American Vernacular English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>welsh</SelectionIdentifier>
+              <Text>Welsh English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>south_african_white</SelectionIdentifier>
+              <Text>White South African English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>zimbabwean_white</SelectionIdentifier>
+              <Text>White Zimbabwean English</Text>
+            </Selection>
+
+          </Selections>
+        </SelectionAnswer>
+      </AnswerSpecification>
+  </Question>
+
+
+<Question>
+      <QuestionIdentifier>q_2</QuestionIdentifier>
+      <DisplayName>Q2</DisplayName>
+      <IsRequired>true</IsRequired>
+      <QuestionContent>
+        <FormattedContent><![CDATA[
+        <p><b>Survey Match:</b> Please take the followng survey: https://calebziems.com/resources/value/dialect-quiz.html</p>
+
+        <p><em>Which (if any) matched dialect did you get?</em></p>  
+        ]]></FormattedContent>
+      </QuestionContent>
+      <AnswerSpecification>
+        <SelectionAnswer>
+          <StyleSuggestion>radiobutton</StyleSuggestion>
+          <Selections>
+
+            <Selection>
+              <SelectionIdentifier>aboriginal</SelectionIdentifier>
+              <Text>Aboriginal English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>fiji_acrolectal</SelectionIdentifier>
+              <Text>Acrolectal Fiji English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>appalachian</SelectionIdentifier>
+              <Text>Appalachian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>australian</SelectionIdentifier>
+              <Text>Australian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>australian_vernacular</SelectionIdentifier>
+              <Text>Australian Vernacular English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>bahamian</SelectionIdentifier>
+              <Text>Bahamian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>south_african_black</SelectionIdentifier>
+              <Text>Black South African English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>cameroon</SelectionIdentifier>
+              <Text>Cameroon English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>cape_flats</SelectionIdentifier>
+              <Text>Cape Flats English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>channel_islands</SelectionIdentifier>
+              <Text>Channel Islands English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>chicano</SelectionIdentifier>
+              <Text>Chicano English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>colloquial_ae</SelectionIdentifier>
+              <Text>Colloquial American English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>singapore</SelectionIdentifier>
+              <Text>Colloquial Singapore English (Singlish)</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>aave_earlier</SelectionIdentifier>
+              <Text>Earlier African American Vernacular English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>east_anglian</SelectionIdentifier>
+              <Text>East Anglian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>england_n</SelectionIdentifier>
+              <Text>English dialects in the North of England</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>england_se</SelectionIdentifier>
+              <Text>English dialects in the Southeast of England</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>england_sw</SelectionIdentifier>
+              <Text>English dialects in the Southwest of England</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>falkland_islands</SelectionIdentifier>
+              <Text>Falkland Islands English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>ghanaian</SelectionIdentifier>
+              <Text>Ghanaian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>hk</SelectionIdentifier>
+              <Text>Hong Kong English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>indian</SelectionIdentifier>
+              <Text>Indian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>indian_south_african</SelectionIdentifier>
+              <Text>Indian South African English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>irish</SelectionIdentifier>
+              <Text>Irish English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>jamaican</SelectionIdentifier>
+              <Text>Jamaican English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>kenyan</SelectionIdentifier>
+              <Text>Kenyan English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>liberian</SelectionIdentifier>
+              <Text>Liberian Settler English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>malaysian</SelectionIdentifier>
+              <Text>Malaysian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>maltese</SelectionIdentifier>
+              <Text>Maltese English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>manx</SelectionIdentifier>
+              <Text>Manx English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>new_zealand</SelectionIdentifier>
+              <Text>New Zealand English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>newfoundland</SelectionIdentifier>
+              <Text>Newfoundland English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>nigerian</SelectionIdentifier>
+              <Text>Nigerian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>orkney</SelectionIdentifier>
+              <Text>Orkney and Shetland English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>ozark</SelectionIdentifier>
+              <Text>Ozark English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>pakistani</SelectionIdentifier>
+              <Text>Pakistani English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>philippine</SelectionIdentifier>
+              <Text>Philippine English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>fiji_pure</SelectionIdentifier>
+              <Text>Pure Fiji English (basilectal FijiE)</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>aave_rural</SelectionIdentifier>
+              <Text>Rural African American Vernacular English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>scottish</SelectionIdentifier>
+              <Text>Scottish English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>se_american_enclave</SelectionIdentifier>
+              <Text>Southeast American enclave dialects</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>sri_lankan</SelectionIdentifier>
+              <Text>Sri Lankan English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>st_helena</SelectionIdentifier>
+              <Text>St. Helena English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>tanzanian</SelectionIdentifier>
+              <Text>Tanzanian English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>tristan_da_cunha</SelectionIdentifier>
+              <Text>Tristan da Cunha English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>ugandan</SelectionIdentifier>
+              <Text>Ugandan English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>aave_urban</SelectionIdentifier>
+              <Text>Urban African American Vernacular English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>welsh</SelectionIdentifier>
+              <Text>Welsh English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>south_african_white</SelectionIdentifier>
+              <Text>White South African English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>zimbabwean_white</SelectionIdentifier>
+              <Text>White Zimbabwean English</Text>
+            </Selection>
+            <Selection>
+              <SelectionIdentifier>other</SelectionIdentifier>
+              <Text>Other</Text>
+            </Selection>
+
+          </Selections>
+        </SelectionAnswer>
+      </AnswerSpecification>
+  </Question>
+
+</QuestionForm>

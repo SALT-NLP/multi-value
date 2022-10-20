@@ -1,0 +1,182 @@
+<!-- You must include this JavaScript file -->
+<script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<style>
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: solid;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.input_field {
+  color:#eb5f07;
+}
+
+mark {
+  background: #eb5f07;
+  color: white;
+}
+
+a {
+  color:#38A1F3;
+}
+</style>
+
+<button class="collapsible">Instructions</button>
+<div class="content">
+  <h2> The goal of this study </h2>
+  <p>Siri, Alexa and other language technologies often have trouble with the speech patterns of people from many underrepresented groups, including the <a href='https://www.scientificamerican.com/article/speech-recognition-tech-is-yet-another-example-of-bias/'>Black community</a>. In this project, we would like to help these technologies better recognize and appropriately respond to dialectal text. This is how you can help us:</p>
+  <ol>
+    <li>You can decide whether bits of <em>automatically-generated</em> (fake) dialect are <b>grammatical:</b> whether it is possible that someone who speaks this dialect could say something like it, at least in theory. </li>
+    <li>You can also help us "translate" some sentences into your dialect.</li>
+  </ol>
+  <hr>
+  <h2>Example from an Indian English speaker</h2>
+  <div style='border-top:solid; border-left:solid; border-right:solid; border-bottom:solid;'>
+      <div style='margin:2%'>
+        <p><b>Sentence (1): </b>I thought sheeps had walked for many than five mile to get here.</p>
+        <p><b>Sentence (2):</b> I thought <a href='null_det' title='1'><mark>the</mark></a><a href='regularized_plurals' title='2'><mark>sheep</mark></a> <a href='present_perfect_for_past' title='3'><mark>walked</mark></a> for <a href='more_many' title='4'><mark>more</mark></a> than five <a href='zero_plural_after_quantifier' title='5'><mark>miles</mark></a> to get here.</p>
+      </div>
+  </div>
+  <br>
+  <p><b class='input_field'> Grammaticality:</b><br>We have highlighted certain portions of <b>Sentence (1)</b> that are different in <b>Sentence (2)</b>. Do the words <em>and</em> the order of the words in <b>Sentence (2)</b> look like something you could reasonably say? (In other words: is this grammatical in your dialect?)</p>
+  <p><em>NO</em></p>
+  <p>If anything is ungrammatical or unnatural, please let us know which of the highlighted segments were changed in a way that doesn't make sense. <div style='font-size:12px'>If you hover over them, each segment will have a number ID. Simply list the IDs of any unnatural segment translations here, separating each with a comma (e.g. "2, 3, 5"). If something else is unnatural but it isn't highlighted, add "OTHER" to the list. If nothing is unnatural, leave this blank.</div></p>
+  <p><em>4</em></p>
+  <br>
+  <p><b class='input_field'>Rephrasing:</b><br>If possible, please provide a revised or alternative rephrasing of <b>Sentence (1)</b> that would be acceptible in an Indian English dialect. If no change is possible, leave this blank and check the box below. </p>
+  <p><em>I thought those sheeps had walked for more than five mile to get here.</em></p>
+</div>
+
+<div style='margin-left: 2%; margin-right: 2%; border-bottom:solid;'>
+  <div>
+    <h1>Dialectal English Understanding </h1>
+    <p>If you haven't already, please open and read the <b>Instructions</b> tab. Your goal is to decide whether bits of text sound unnatural or ungrammatical.</p>
+  </div>
+</div>
+
+<div style='margin-left: 5%; margin-right: 5%; margin-top: 2%; margin-bottom:5%'>
+  <crowd-form answer-format="flatten-objects" onsubmit="return submit_form();">
+
+    <div style='border-top:solid; border-left:solid; border-right:solid; border-bottom:solid;'>
+      <div style='margin:2%'>
+        <p><b>Sentence (1): </b> ${input_text}</p>
+        <p><b>Sentence (2):</b> ${sae_highlight}</p>
+      </div>
+    </div>
+    <br>
+    <div>
+      <div>
+        <p><b style="color:#9B5277"> Grammaticality:</b><br>We have highlighted certain portions of <b>Sentence (1)</b> that are different in <b>Sentence (2)</b>. Do the words <em>and</em> the order of the words in <b>Sentence (2)</b> look like something you could reasonably say in IE? (In other words: is this grammatical in your dialect?)<br><br>
+        <crowd-radio-group>  
+          <crowd-radio-button name='accept_yes' id='aggr_yes'></crowd-radio-button>Yes, <em>grammatical</em> <br>
+          <crowd-radio-button name='accept_no' id='aggr_no'></crowd-radio-button>No, <em>not grammatical</em>
+        </crowd-radio-group>
+        <br>
+        <br>
+        <p>If anything is ungrammatical or unnatural, please let us know which of the highlighted segments were changed in a way that doesn't make sense. <div style='font-size:12px'>If you hover over them, each segment will have a number ID. Simply list the IDs of any unnatural segment translations here, separating each with a comma (e.g. "2, 3, 5"). If something else is unnatural but it isn't highlighted, add "OTHER" to the list. If nothing is unnatural, leave this blank.</div></p>
+        <crowd-input name="error_ids" id="error_ids"></crowd-input>
+      </div>
+      <br>
+      <div>
+          <p><b style="color:#5AA2A6">Social Context:</b> If someone said this in your community, how socially acceptable would it be on a scale from 1-10?</p>
+          <crowd-radio-group>
+              <img src="https://images.emojiterra.com/twitter/v13.0/512px/1f620.png" alt="sad" style="width:50px;height:50px;"> 
+              1
+              <crowd-radio-button name='social_1' id='social_1'></crowd-radio-button>
+              2
+              <crowd-radio-button name='social_2' id='social_2'></crowd-radio-button>
+              3
+              <crowd-radio-button name='social_3' id='social_3'></crowd-radio-button>
+              4
+              <crowd-radio-button name='social_4' id='social_4'></crowd-radio-button>
+              <img src="https://emojis.wiki/emoji-pics/apple/neutral-face-apple.png" alt="sad" style="width:50px;height:50px;"> 
+              5
+              <crowd-radio-button name='social_5' id='social_5'></crowd-radio-button>
+              6
+              <crowd-radio-button name='social_6' id='social_6'></crowd-radio-button>
+              7
+              <crowd-radio-button name='social_7' id='social_7'></crowd-radio-button>
+              8
+              <crowd-radio-button name='social_8' id='social_8'></crowd-radio-button>
+              9
+              <crowd-radio-button name='social_9' id='social_9'></crowd-radio-button>
+              10
+              <crowd-radio-button name='social_10' id='social_10'></crowd-radio-button>
+
+              <img src="https://emojigraph.org/media/twitter/smiling-face-with-sunglasses_1f60e.png" alt="sad" style="width:50px;height:50px;">
+          </crowd-radio-group>
+      </div>
+      <br>
+      <div>
+        <b style="color:#78A56A">Rephrasing:</b><br>If possible, please provide a revised or alternative rephrasing of <b>Sentence (1)</b> that would be acceptible in your dialect. If no change is possible, leave this blank and check the box below. 
+        <crowd-input name="rephrased" id="rephrased"></crowd-input>
+      </div>
+      <br>
+      <div>
+          <crowd-checkbox name="no_change", id='no_change'><b style="color:#BB271A">No Change:</b> Check this box if no change to the sentence was possible.</crowd-checkbox>
+      </div>
+      <br><br>
+      <div>
+        <b>Voice:</b><br>Consider the best dialect sentence: either your Rephrase or Sentence 2 if no Rephrase given. You might not imagine yourself saying something like this, but you might imagine someone (like your grandma) saying it. Please indicate who might say something like this. 
+        <p><b style="color:#634FA2">Age of Person Speaking:</b></p>
+        <crowd-checkbox name="voice_age_under_18", id='voice_age_under_18'> < 18</crowd-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        <crowd-checkbox name="voice_age_18_24", id='voice_age_18_24'> 18-24</crowd-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <crowd-checkbox name="voice_age_25_34", id='voice_age_25_34'> 25-34</crowd-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <crowd-checkbox name="voice_age_35_44", id='voice_age_35_44'> 35-44</crowd-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <crowd-checkbox name="voice_age_45_54", id='voice_age_45_54'> 45-54</crowd-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <crowd-checkbox name="voice_age_55_64", id='voice_age_55_64'> 55-64</crowd-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <crowd-checkbox name="voice_age_above_64", id='voice_age_55_64'> > 64 </crowd-checkbox>
+        <br><br>
+        <!--<crowd-input name="voice" id="voice" required></crowd-input>-->
+
+        <p><b style="color:#634FA2">Relationship to Person Speaking:</b></p>
+        <crowd-checkbox name="voice_relative", id='voice_relative'>Relative</crowd-checkbox><br>
+        <crowd-checkbox name="voice_friend", id='voice_friend'>Friend</crowd-checkbox><br>
+        <crowd-checkbox name="voice_coworker", id='voice_coworker'>Co-Worker</crowd-checkbox><br>
+        <crowd-checkbox name="voice_celeb", id='voice_celeb'>Celebrity/Public Figure</crowd-checkbox><br>
+        <crowd-checkbox name="voice_community", id='voice_community'>Community at Large</crowd-checkbox><br>
+      </div>
+      <br><br>
+      <div>
+        <b>Comments:</b><br>If you have any other comments, please put them here.
+        <crowd-input name="comments" id="comments"></crowd-input>
+      </div>
+    </div>
+    <br>
+  </crowd-form>
+</div>
+<!-- Must be at the end of the document -->
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
