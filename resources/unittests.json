@@ -75,9 +75,45 @@
     ],
     "10": [
         {
-            "gloss": "Susan is a nurse but she does not like to put drips on patients.",
+            "gloss": "Sam is a nurse but she does not like to put drips on patients.",
             "dialect": [
-                "Susan is a nurse but he does not like to put drips on patients."
+                "Sam is a nurse but he does not like to put drips on patients."
+            ]
+        },
+        {
+            "gloss": "Sam is a nurse but he does not like to put drips on patients.",
+            "dialect": [
+                "Sam is a nurse but she does not like to put drips on patients."
+            ]
+        },
+        {
+            "gloss": "Give the cake to her.",
+            "dialect": [
+                "Give the cake to him."
+            ]
+        },
+        {
+            "gloss": "Give the cake to him.",
+            "dialect": [
+                "Give the cake to her."
+            ]
+        },
+        {
+            "gloss": "That is her cake.",
+            "dialect": [
+                "That is his cake."
+            ]
+        },
+        {
+            "gloss": "That is his cake.",
+            "dialect": [
+                "That is her cake."
+            ]
+        },
+        {
+            "gloss": "That cake is his.",
+            "dialect": [
+                "That cake is hers."
             ]
         }
     ],

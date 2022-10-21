@@ -56,7 +56,7 @@ def main():
                     a['dialect_input_text'] = D.convert_sae_to_dialect(a['input_text'])
                 datapoint['dialect_story'] = D.convert_sae_to_dialect(datapoint['story'])
 
-            output = f"data/CoQA/{D.dialect_code}_CoQA"
+            output = f"data/{D.dialect_code}_CoQA"
                 
             if not os.path.exists(output):
                 os.makedirs(output)

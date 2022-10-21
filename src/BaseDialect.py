@@ -21,7 +21,7 @@ import neuralcoref
 
 
 class BaseDialect(object):
-    def __init__(self, lexical_swaps={}, morphosyntax=True):
+    def __init__(self, lexical_swaps={}, morphosyntax=True, seed=None):
         self.string = ""
         self.rules = defaultdict(dict)
         self.executed_rules = {}
@@ -40,6 +40,9 @@ class BaseDialect(object):
         self.inflection = inflect.engine()
         self.cmudict = cmudict.dict()
         self.wnl = WordNetLemmatizer()
+        
+        if seed:
+            self.set_seed(seed)
         
         # variables
         self.aint = False
@@ -112,6 +115,9 @@ class BaseDialect(object):
     def __str__(self):
         return self.dialect_name
     
+    def set_seed(self, seed):
+        random.seed(seed)
+    
     def load_dict(self, fn):
         with open(fn, 'r') as infile:
             return json.load(infile)
@@ -122,6 +128,9 @@ class BaseDialect(object):
             string = method(string)
         return string.strip()
 
+    def transform(self, string):
+        return self.convert_sae_to_dialect(string)
+    
     def convert_sae_to_dialect(self, string):
         """Full Conversion Pipeline"""
         self.update(string)
@@ -388,7 +397,6 @@ class BaseDialect(object):
     
     def is_coordinate_subject_superordinate(self, token):
         return (token.dep_ == 'nsubj' and 'cc' in {c.dep_ for c in token.children}) 
-                
         
     def benefactive_dative(self):
         # feature 9
@@ -407,10 +415,23 @@ class BaseDialect(object):
                 
     def no_gender_distinction(self):
         # feature 10
+        mapping = {
+            ('she', 'nsubj'): 'he',
+            ('he', 'nsubj'): 'she',
+            ('her', 'dobj'): 'him',
+            ('him', 'dobj'): 'her',
+            ('her', 'pobj'): 'him',
+            ('him', 'pobj'): 'her',
+            ('her', 'poss'): 'his',
+            ('his', 'poss'): 'her',
+            ('hers', 'attr'): 'his',
+            ('his', 'attr'): 'hers',
+        }
+        
         for token in self.tokens:
-            if token.lower_ == 'she':
-                self.set_rule(token, 'he', "no_gender_distinction")
-                    
+            tup = (token.lower_, token.dep_)
+            if tup in mapping:
+                self.set_rule(token, mapping[tup], "no_gender_distinction")
         
     def regularized_reflexives(self):
         # feature 11
@@ -3179,17 +3200,3 @@ class BaseDialect(object):
         if prev_idx < len(self.string):
             compiled += self.string[prev_idx:]
         return compiled
-
-    def prepare_MTURK(self, sentences):
-        """Converts all @sentences to HTML transformation highlighting (used for MTurk validation)"""
-        data = {}
-        for i, sae in enumerate(sentences):
-            aave = self.convert_sae_to_dialect(sae)
-            sae_highlight = self.highlight_modifications_html()
-            data[i] = {
-                "sae": sae,
-                "sae_highlight": sae_highlight,
-                "aave": aave,
-                "rules": self.rules,
-            }
-        return pd.DataFrame().from_dict(data, orient="index")

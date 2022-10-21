@@ -1,0 +1,77 @@
+name,abbr,latitude,longitude,region
+Orkney and Shetland English,O&SE,59.5,-2.1,British Isles
+Scottish English,ScE,56.9,-1.7,British Isles
+Irish English,IrE,52.8,-7.8,British Isles
+Manx English,ManxE,54.16,-4.57,British Isles
+Welsh English,WelE,52.3,-3.5,British Isles
+English dialects in the North of England,North,53.7,-1.7,British Isles
+English dialects in the Southwest of England,SW,50.8,-4.0,British Isles
+East Anglian English,EA,52.3,0.7,British Isles
+English dialects in the Southeast of England,SE,51.1,0.6,British Isles
+Channel Islands English,ChIsE,49.38,-2.46,British Isles
+British Creole,BrC,51.46,-0.11,British Isles
+Maltese English,MaltE,36.03,14.41,British Isles
+Newfoundland English,NfldE,48.8,-57.0,America
+Colloquial American English,CollAmE,39.1,-101.8,America
+Urban African American Vernacular English,UAAVE,39.5,-102.0,America
+Rural African American Vernacular English,RAAVE,37.5,-77.43,America
+Earlier African American Vernacular English,EAAVE,34.85,-82.4,America
+Ozark English,OzE,37.0,-91.71,America
+Appalachian English,AppE,39.5,-79.5,America
+Southeast American enclave dialects,SEAmE,34.2,-80.9,America
+Gullah,Gullah,36.0,-77.5,America
+Chicano English,ChcE,35.48,-118.74,America
+Bahamian English,BahE,24.3,-78.0,Caribbean
+Bahamian Creole,BahC,25.16,-77.34,Caribbean
+Barbadian Creole (Bajan),Bajan,13.23,-59.76,Caribbean
+Jamaican English,JamE,17.97,-76.64,Caribbean
+Jamaican Creole,JamC,18.1,-77.4,Caribbean
+San Andrés Creole,SanAC,12.53,-81.71,Caribbean
+Belizean Creole,BelC,17.5,-88.19,Caribbean
+Guyanese Creole (Creolese),GuyC,6.66,-58.0,Caribbean
+Eastern Maroon Creole,EMarC,4.25,-54.38,Caribbean
+Saramaccan,Saramaccan,4.59,-55.46,Caribbean
+Sranan,Sranan,5.81,-55.16,Caribbean
+Trinidadian Creole,TrinC,10.65,-61.47,Caribbean
+Vincentian Creole,VinC,13.15,-61.22,Caribbean
+Krio (Sierra Leone Creole),Krio,8.4,-13.35,Africa
+Liberian Settler English,LibSE,5.36,-8.54,Africa
+Vernacular Liberian English,VLibE,6.3,-10.79,Africa
+Ghanaian English,GhE,7.36,-1.42,Africa
+Ghanaian Pidgin,GhP,5.73,-0.3,Africa
+Nigerian English,NigE,9.1,7.38,Africa
+Nigerian Pidgin,NigP,6.34,6.8,Africa
+Cameroon English,CamE,4.8,13.2,Africa
+Cameroon Pidgin,CamP,4.33,9.8,Africa
+Tanzanian English,TznE,-6.17,35.73,Africa
+Kenyan English,KenE,-1.4,36.91,Africa
+Ugandan English,UgE,0.35,32.6,Africa
+White Zimbabwean English,WhZimE,-17.81,31.2,Africa
+Black South African English,BlSAfE,-25.8,28.55,Africa
+Indian South African English,InSAfE,-32.47,19.76,Africa
+White South African English,WhSAfE,-32.47,25.39,Africa
+Indian English,IndE,28.61,77.34,South and Southeast Asia
+Pakistani English,PakE,28.8,68.7,South and Southeast Asia
+Butler English,ButlE,19.8,78.6,South and Southeast Asia
+Sri Lankan English,SLkE,6.92,79.84,South and Southeast Asia
+Hong Kong English,HKE,22.26,114.25,South and Southeast Asia
+Colloquial Singapore English (Singlish),CollSgE,1.4,103.71,South and Southeast Asia
+Malaysian English,MalE,4.1,102.2,South and Southeast Asia
+Australian English,AusE,-35.17,149.06,Australia
+Australian Vernacular English,AusVE,-42.88,147.33,Australia
+Aboriginal English,AborE,-25.2,120.0,Australia
+Roper River Creole (Kriol),RRC,-14.6,132.18,Australia
+Torres Strait Creole,TorSC,-10.05,143.06,Australia
+New Zealand English,NZE,-42.2,172.1,Pacific
+Norfolk Island/ Pitcairn English,Norf'k,-29.02,167.95,Pacific
+Palmerston English,PalmE,-18.06,-163.15,Pacific
+Acrolectal Fiji English,FijiE,-17.58,177.55,Pacific
+Pure Fiji English (basilectal FijiE),CollFijiE,-17.92,178.47,Pacific
+Bislama,Bislama,-15.52,167.16,Pacific
+Tok Pisin,TP,-9.48,147.19,Pacific
+Hawaiʼi Creole,HawC,21.0,-157.1,Pacific
+Falkland Islands English,FlkE,-51.42,-57.51,South Atlantic
+St. Helena English,StHE,-15.96,-5.71,South Atlantic
+Tristan da Cunha English,TdCE,-37.11,-12.27,South Atlantic
+Philippine English,PhilE,14.651354,121.049709,South and Southeast Asia
+Cape Flats English,CFE,-33.96,18.65,Africa
