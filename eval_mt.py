@@ -12,7 +12,6 @@ from src.Dialects import (
 )
 from sacrebleu.metrics import BLEU
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
-from scipy.stats import bootstrap
 
 TASK = "translation"
 # CKPT = "facebook/nllb-200-distilled-600M"
