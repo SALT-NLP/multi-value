@@ -1,21 +1,24 @@
 from datasets import load_dataset
 from transformers.pipelines.pt_utils import KeyDataset
+import numpy as np
 from src.Dialects import (
     AfricanAmericanVernacular,
     IndianDialect,
     ColloquialSingaporeDialect,
     ChicanoDialect,
     AppalachianDialect,
+    NigerianDialect,
+    BlackSouthAfricanDialect,
 )
+from sacrebleu.metrics import BLEU
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 
 TASK = "translation"
-CKPT = "facebook/nllb-200-1.3B"
+# CKPT = "facebook/nllb-200-distilled-600M"
+CKPT = "facebook/nllb-200-distilled-1.3B"
 src_lang = "eng_Latn"
 tgt_lang_dict = {"de": "deu_Latn", "ru": "rus_Cyrl", "zh": "zho_Hans", "gu": "guj_Gujr"}
-device = 0
-
-import evaluate
+device = 3 if "1.3B" in CKPT else 1
 
 
 def dialect_factory(dialect):
@@ -49,7 +52,6 @@ def translate_factory(pipe):
     return translate
 
 
-sacrebleu = evaluate.load("sacrebleu")
 model = AutoModelForSeq2SeqLM.from_pretrained(CKPT).to("cuda:" + str(device))
 tokenizer = AutoTokenizer.from_pretrained(CKPT)
 for lang in ["de", "gu", "zh", "ru"]:
@@ -63,6 +65,7 @@ for lang in ["de", "gu", "zh", "ru"]:
         max_length=400,
         device=device,
     )
+    sacrebleu = BLEU(trg_lang=lang)
     for dialect in [
         None,
         AfricanAmericanVernacular,
@@ -70,6 +73,8 @@ for lang in ["de", "gu", "zh", "ru"]:
         ColloquialSingaporeDialect,
         ChicanoDialect,
         AppalachianDialect,
+        NigerianDialect,
+        BlackSouthAfricanDialect,
     ]:
         d_dataset = dataset.map(flatten_factory(lang))
         if dialect:
@@ -79,8 +84,11 @@ for lang in ["de", "gu", "zh", "ru"]:
         else:
             dialect_name = "Standard American"
         d_dataset = d_dataset.map(translate_factory(pipe), batched=True)
-        results = sacrebleu.compute(
-            predictions=d_dataset["tgt_pred"], references=d_dataset["tgt"]
+        rng = np.random.default_rng(12345)
+        res = sacrebleu.corpus_score(
+            list(d_dataset["tgt_pred"]),
+            [list(d_dataset["tgt"])],
+            n_bootstrap=1000,
         )
         print(f"{dialect_name} en -> {lang}")
-        print(results)
+        print(res.format().encode("latin-1", "replace").decode("latin-1"))
