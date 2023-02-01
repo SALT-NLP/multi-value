@@ -35,7 +35,7 @@ class BaseDialect(object):
         # Note(will): For some reason, I was seeing Seg Faults when calling self.nlp
         # if I did neuralcoref.add_to_pipe(spacy.load(self.nlp)) after load
         self.nlp = spacy.load("en_core_web_sm")
-        neuralcoref.add_to_pipe(self.nlp)
+        neuralcoref.add_to_pipe(spacy.load("en_core_web_sm"))
         self.inflector = English()
         self.inflection = inflect.engine()
         self.cmudict = cmudict.dict()
