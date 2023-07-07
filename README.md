@@ -6,7 +6,7 @@
 
 1. Create a virtual environment
 ```bash
-conda create --name value python=3.7
+conda create --name value python=3.7.13
 conda activate value
 ```
 
@@ -21,6 +21,7 @@ python -m spacy download en_core_web_sm
 python 
 >>> import nltk
 >>> nltk.download('wordnet')
+>>> nltk.download('cmudict')
 >>> quit()
 ```
 

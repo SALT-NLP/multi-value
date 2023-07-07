@@ -33,7 +33,7 @@ class BaseDialect(object):
         self.lexical_swaps = lexical_swaps
 
         self.nlp = spacy.load("en_core_web_sm")
-        neuralcoref.add_to_pipe(spacy.load("en_core_web_sm"))
+        neuralcoref.add_to_pipe(self.nlp) # on Linux, switch to neuralcoref.add_to_pipe(spacy.load("en_core_web_sm"))
         self.inflector = English()
         self.inflection = inflect.engine()
         self.cmudict = cmudict.dict()
