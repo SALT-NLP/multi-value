@@ -1,0 +1,72 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "value"
+version = "0.1"
+authors = [
+  { name="Will Held", email="wheld3@gatech.edu" },
+  {name="Caleb Ziems", email="cjziems@stanford.edu"}
+]
+description = "A Framework for Cross-Dialectal NLP"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+        "nltk==3.5",
+        "numpy",
+        "pandas",
+        "tqdm",
+        "neuralcoref==4.0",
+        "lemminflect==0.2.2",
+        "spacy==2.1.0",
+        "inflect==5.5.2",
+        "torch==1.7.1",
+        "transformers==4.16.2",
+        "datasets==2.1.0",
+        "geopy==2.2.0"
+]
+
+[tool.hatch.build]
+include = ["resources/*.json", "resources/*.txt", "resources/*.csv", "resources/*.tsv", "*.py"]
+dev-mode-dirs = [".", "src", "resources"]
+
+[tool.hatch.build.sources]
+"src" = "value"
+"resources" = "value/resources"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["value"]
+
+[project.urls]
+"Homepage" = "value-nlp.org"
+"Bug Tracker" = "https://github.com/SALT-NLP/multi-value/issues"
+
+[tool.black]
+line-length = 119
+target-version = ["py310"]
+preview = true
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+lines_after_imports = 2
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 119
+src_paths = ["src", "tests"]
+known_haliax = ["haliax"]
+sections=["FUTURE", "STDLIB", "THIRDPARTY", "HALIAX", "FIRSTPARTY", "LOCALFOLDER"]
