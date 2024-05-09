@@ -1,12 +1,12 @@
 import unittest
-import src.Dialects
+from value import BaseDialect, Dialects
 import pandas as pd
 import json
 
 class TestStringMethods(unittest.TestCase):
     
     def test_all_methods(self):
-        D = src.Dialects.DialectFromVector(dialect_name="all")
+        D = Dialects.DialectFromVector(dialect_name="all")
         feature_id_to_function_name = D.load_dict('resources/feature_id_to_function_name.json')
         uts = D.load_dict('resources/unittests.json')
         
@@ -25,3 +25,4 @@ class TestStringMethods(unittest.TestCase):
                         failure_cases += 1
                         print(feature_id, function_name, dialect, synth_dialect)
         assert(failure_cases==0)
+

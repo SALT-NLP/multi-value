@@ -17,7 +17,7 @@ from nltk.corpus import cmudict
 from nltk.corpus import wordnet as wn
 from nltk.metrics.distance import edit_distance
 from nltk.stem.wordnet import WordNetLemmatizer
-import neuralcoref
+import stanza
 
 
 class BaseDialect(object):
@@ -33,7 +33,7 @@ class BaseDialect(object):
         self.lexical_swaps = lexical_swaps
 
         self.nlp = spacy.load("en_core_web_sm")
-        neuralcoref.add_to_pipe(self.nlp) # on Linux, switch to neuralcoref.add_to_pipe(spacy.load("en_core_web_sm"))
+        self.coref = stanza.Pipeline("en", processors="tokenize,mwt,pos,lemma,depparse,coref")
         self.inflector = English()
         self.inflection = inflect.engine()
         self.cmudict = cmudict.dict()
@@ -120,76 +120,36 @@ class BaseDialect(object):
             "yell",
         }
 
-        self.NEGATIVES = self.load_dict(
-            self.relatavize_file("resources/negatives.json")
-        )
-        self.NEGATIVES_NO_MORE = self.load_dict(
-            self.relatavize_file("resources/negatives_no_more.json")
-        )
-        self.REFLEXIVES_SUBJ = self.load_dict(
-            self.relatavize_file("resources/reflexives_subj.json")
-        )
-        self.REFLEXIVES_NUMBER_SWAP = self.load_dict(
-            self.relatavize_file("resources/reflexives_number_swap.json")
-        )
-        self.AAVE_REFLEXIVES = self.load_dict(
-            self.relatavize_file("resources/reflexives_aave.json")
-        )
-        self.EMPHATIC_REFLEXIVES = self.load_dict(
-            self.relatavize_file("resources/reflexives_emphatic.json")
-        )
-        self.REFLEXIVES_REGULARIZED = self.load_dict(
-            self.relatavize_file("resources/reflexives_regularized.json")
-        )
-        self.REFLEXIVES_OBJ_PRON = self.load_dict(
-            self.relatavize_file("resources/reflexives_obj_pron.json")
-        )
-        self.PAST_MODAL_MAPPING = self.load_dict(
-            self.relatavize_file("resources/modals_past.json")
-        )
-        self.POSSESSIVES = self.load_dict(
-            self.relatavize_file("resources/possessives.json")
-        )
-        self.PLURAL_DETERMINERS = self.load_dict(
-            self.relatavize_file("resources/det_plural.json")
-        )
-        self.POSSESSIVE_OBJ_DET = self.load_dict(
-            self.relatavize_file("resources/det_possessive_obj.json")
-        )
-        self.PRONOUN_OBJ_TO_SUBJ = self.load_dict(
-            self.relatavize_file("resources/pron_obj_to_subj.json")
-        )
-        self.FLAT_ADV_ADJ = self.load_dict(
-            self.relatavize_file("resources/adv_adj_flat.json")
-        )
-        self.NOUN_CONCRETENESS = self.load_dict(
-            self.relatavize_file("resources/noun_concreteness.json")
-        )
+        self.NEGATIVES = self.load_dict(self.relatavize_file("resources/negatives.json"))
+        self.NEGATIVES_NO_MORE = self.load_dict(self.relatavize_file("resources/negatives_no_more.json"))
+        self.REFLEXIVES_SUBJ = self.load_dict(self.relatavize_file("resources/reflexives_subj.json"))
+        self.REFLEXIVES_NUMBER_SWAP = self.load_dict(self.relatavize_file("resources/reflexives_number_swap.json"))
+        self.AAVE_REFLEXIVES = self.load_dict(self.relatavize_file("resources/reflexives_aave.json"))
+        self.EMPHATIC_REFLEXIVES = self.load_dict(self.relatavize_file("resources/reflexives_emphatic.json"))
+        self.REFLEXIVES_REGULARIZED = self.load_dict(self.relatavize_file("resources/reflexives_regularized.json"))
+        self.REFLEXIVES_OBJ_PRON = self.load_dict(self.relatavize_file("resources/reflexives_obj_pron.json"))
+        self.PAST_MODAL_MAPPING = self.load_dict(self.relatavize_file("resources/modals_past.json"))
+        self.POSSESSIVES = self.load_dict(self.relatavize_file("resources/possessives.json"))
+        self.PLURAL_DETERMINERS = self.load_dict(self.relatavize_file("resources/det_plural.json"))
+        self.POSSESSIVE_OBJ_DET = self.load_dict(self.relatavize_file("resources/det_possessive_obj.json"))
+        self.PRONOUN_OBJ_TO_SUBJ = self.load_dict(self.relatavize_file("resources/pron_obj_to_subj.json"))
+        self.FLAT_ADV_ADJ = self.load_dict(self.relatavize_file("resources/adv_adj_flat.json"))
+        self.NOUN_CONCRETENESS = self.load_dict(self.relatavize_file("resources/noun_concreteness.json"))
 
         # https://www.ef.com/wwen/english-resources/english-grammar/adverbs-degree/
-        self.DEGREE_MODIFIER_ADV_ADJ = self.load_dict(
-            self.relatavize_file("resources/adv_adj_degree_modifier.json")
-        )
+        self.DEGREE_MODIFIER_ADV_ADJ = self.load_dict(self.relatavize_file("resources/adv_adj_degree_modifier.json"))
 
         # this list was drawn from VerbNet and compiled with `build_benefactive_ditransitive_verb_list.py`
         # with verb_transitivity.tsv from https://github.com/wilcoxeg/verb_transitivity/raw/master/verb_transitivity.tsv
-        with open(
-            self.relatavize_file("resources/benefactive_verbs.txt"), "r"
-        ) as infile:
-            self.DITRANSITIVE_VERBS_BENEFACTIVE = {
-                lemma.strip() for lemma in infile.readlines()
-            }
+        with open(self.relatavize_file("resources/benefactive_verbs.txt"), "r") as infile:
+            self.DITRANSITIVE_VERBS_BENEFACTIVE = {lemma.strip() for lemma in infile.readlines()}
 
         # this list was drawn from VerbNet and compiled with `build_benefactive_ditransitive_verb_list.py`
-        with open(
-            self.relatavize_file("resources/ditransitive_dobj_verbs.txt"), "r"
-        ) as infile:
+        with open(self.relatavize_file("resources/ditransitive_dobj_verbs.txt"), "r") as infile:
             self.DITRANSITIVE_VERBS = {lemma.strip() for lemma in infile.readlines()}
 
         # this list was drawn from VerbNet and compiled with `build_benefactive_ditransitive_verb_list.py`
-        with open(
-            self.relatavize_file("resources/transitive_dobj_verbs.txt"), "r"
-        ) as infile:
+        with open(self.relatavize_file("resources/transitive_dobj_verbs.txt"), "r") as infile:
             self.TRANSITIVE_VERBS = {lemma.strip() for lemma in infile.readlines()}
 
     def __getstate__(self):
@@ -206,7 +166,7 @@ class BaseDialect(object):
 
     def relatavize_file(self, file_name):
         dirname = os.path.dirname(__file__)
-        return os.path.join(dirname, "..", file_name)
+        return os.path.join(dirname, "../../", file_name)
 
     def set_seed(self, seed):
         random.seed(seed)
@@ -233,21 +193,18 @@ class BaseDialect(object):
             method()
 
         transformed = self.surface_sub(self.compile_from_rules())
-        return (
-            self.capitalize(transformed) if self.is_capitalized(string) else transformed
-        )
+        return self.capitalize(transformed) if self.is_capitalized(string) else transformed
 
     def clear(self):
         """clear all memory of previous string"""
         self.string = ""
         self.rules = defaultdict(dict)
         self.doc = None
+        self.coref_clusters = None
         self.tokens = []
         self.end_idx = 0
         self.modification_counter = {
-            label: 0
-            for label in list(self.morphosyntax_transforms.keys())
-            + ["lexical", "total"]
+            label: 0 for label in list(self.morphosyntax_transforms.keys()) + ["lexical", "total"]
         }
 
     def update(self, string):
@@ -255,12 +212,33 @@ class BaseDialect(object):
         self.clear()
         self.string = string
         self.doc = self.nlp(string)
+        self.coref_clusters = self.create_coref_cluster(string)
         self.tokens = list(self.doc)
         self.end_idx = len(string) - 1
 
-    def set_rule(
-        self, token, value, function_name, check_capital=True, token_alignment={}
-    ):
+    def create_coref_cluster(self, string):
+        doc = self.coref(string)
+        clusters = []
+        spacy_sents = list(self.doc.sents)
+        assert len(doc.sentences) == len(spacy_sents), "Spacy and Stanza sentence mismatch."
+        for chain in doc.coref:
+            cluster = []
+            for ment in chain.mentions:
+                stanza_sent = doc.sentences[ment.sentence]
+                spacy_sent = spacy_sents[ment.sentence]
+                if len(stanza_sent.words) == len(spacy_sent):
+                    tokens = spacy_sent[ment.start_word : ment.end_word]
+                else:
+                    corrected_spacy_sent = [word for word in spacy_sent if word.text.strip() != ""]
+                    tokens = corrected_spacy_sent[ment.start_word : ment.end_word]
+                assert [tok.text for tok in tokens] == [
+                    tok.text for tok in stanza_sent.words[ment.start_word : ment.end_word]
+                ], "Spacy and Stanza word mismatch"
+                cluster.append(tokens)
+            clusters.append(cluster)
+        return clusters if len(clusters) > 0 else None
+
+    def set_rule(self, token, value, function_name, check_capital=True, token_alignment={}):
         if not len(function_name):
             print(3 / 0)  # Throw error
 
@@ -296,9 +274,7 @@ class BaseDialect(object):
             self.modification_counter[function_name] += 1
             self.modification_counter["total"] += 1
 
-    def set_rule_span(
-        self, span, value, function_name, check_capital=True, token_alignment={}
-    ):
+    def set_rule_span(self, span, value, function_name, check_capital=True, token_alignment={}):
         text = str(self.doc)
         if check_capital and text[span[0]].isupper() and len(value):
             remainder = ""
@@ -308,11 +284,7 @@ class BaseDialect(object):
 
         start_idx, end_idx = span
         end_idx = min(end_idx - 1, self.end_idx)
-        if (
-            (not len(value))
-            and (end_idx + 1 <= self.end_idx)
-            and str(self.doc)[end_idx + 1] == " "
-        ):
+        if (not len(value)) and (end_idx + 1 <= self.end_idx) and str(self.doc)[end_idx + 1] == " ":
             end_idx += 1
 
         self.rules[function_name][(start_idx, end_idx)] = {
@@ -400,11 +372,7 @@ class BaseDialect(object):
 
         return any(
             [
-                len(
-                    set(self.adjective_synsets(wn.synsets(sup))).intersection(
-                        orig_synsets
-                    )
-                )
+                len(set(self.adjective_synsets(wn.synsets(sup))).intersection(orig_synsets))
                 for sup in superlative.values()
             ]
         )
@@ -418,13 +386,12 @@ class BaseDialect(object):
         self.inanimate_objects(p=1, name="he_inanimate_objects")
 
     def inanimate_objects(self, p=0.5, name="inanimate_objects"):
-        if self.doc._.coref_clusters:
-            for cluster in self.doc._.coref_clusters:
+        if self.coref_clusters:
+            for cluster in self.coref_clusters:
                 human_span = False
                 prp = None
-                for span in cluster.mentions:
-                    for token_idx in range(span.start, span.end):
-                        token = self.doc[token_idx]
+                for span in cluster:
+                    for token in span:
                         if self.token_is_human(token):
                             human_span = True
                         if token.tag_ == "PRP":
@@ -457,9 +424,11 @@ class BaseDialect(object):
     def em_subj_pronoun(self):
         # feature 5
         for token in self.tokens:
-            if (
-                token.dep_ == "nsubj" or self.is_coordinate_subject_subordinate(token)
-            ) and token.lower_ in {"he", "she", "it"}:
+            if (token.dep_ == "nsubj" or self.is_coordinate_subject_subordinate(token)) and token.lower_ in {
+                "he",
+                "she",
+                "it",
+            }:
                 self.set_rule(token, "em", "em_subj_pronoun")
 
     def em_obj_pronoun(self):
@@ -508,9 +477,7 @@ class BaseDialect(object):
 
     def is_coordinate_subject(self, token):
         """Returns True if the token belongs to a subject conjunction"""
-        return self.is_coordinate_subject_subordinate(
-            token
-        ) or self.is_coordinate_subject_superordinate(token)
+        return self.is_coordinate_subject_subordinate(token) or self.is_coordinate_subject_superordinate(token)
 
     def is_coordinate_subject_subordinate(self, token):
         return token.dep_ == "conj" and token.head.dep_ == "nsubj"
@@ -583,33 +550,25 @@ class BaseDialect(object):
         # feature 13
         for token in self.tokens:
             if token.lower_ in self.AAVE_REFLEXIVES:
-                self.set_rule(
-                    token, self.AAVE_REFLEXIVES[token.lower_], "regularized_reflexives"
-                )
+                self.set_rule(token, self.AAVE_REFLEXIVES[token.lower_], "regularized_reflexives")
 
     def reflex_number(self):
         # feature 14
         for token in self.tokens:
             if token.lower_ in self.REFLEXIVES_NUMBER_SWAP:
-                self.set_rule(
-                    token, self.REFLEXIVES_NUMBER_SWAP[token.lower_], "reflex_number"
-                )
+                self.set_rule(token, self.REFLEXIVES_NUMBER_SWAP[token.lower_], "reflex_number")
 
     def absolute_reflex(self):
         # feature 15
         for token in self.tokens:
             if token.dep_ == "nsubj" and token.lower_ in self.REFLEXIVES_SUBJ:
-                self.set_rule(
-                    token, self.REFLEXIVES_SUBJ[token.lower_], "absolute_reflex"
-                )
+                self.set_rule(token, self.REFLEXIVES_SUBJ[token.lower_], "absolute_reflex")
 
     def emphatic_reflex(self):
         # feature 16
         for token in self.tokens:
             if token.lower_ in self.EMPHATIC_REFLEXIVES:
-                self.set_rule(
-                    token, self.EMPHATIC_REFLEXIVES[token.lower_], "emphatic_reflex"
-                )
+                self.set_rule(token, self.EMPHATIC_REFLEXIVES[token.lower_], "emphatic_reflex")
 
     def reflexives_swap(self):
         # features 11-16
@@ -786,11 +745,10 @@ class BaseDialect(object):
 
     def anaphoric_it(self):
         # feature 41
-        if self.doc._.coref_clusters:
-            for cluster in self.doc._.coref_clusters:
-                for span in cluster.mentions:
-                    for token_idx in range(span.start, span.end):
-                        token = self.doc[token_idx]
+        if self.coref_clusters:
+            for cluster in self.coref_clusters:
+                for span in cluster:
+                    for token in span:
                         if token.lower_ == "they":
                             self.set_rule(token, "it", "anaphoric_it")
 
@@ -802,37 +760,27 @@ class BaseDialect(object):
 
     def null_referential_pronouns(self):
         # feature 43
-        if self.doc._.coref_clusters:
-            for cluster in self.doc._.coref_clusters:
-                for span in cluster.mentions:
-                    for token_idx in range(span.start, span.end):
-                        token = self.doc[token_idx]
+        if self.coref_clusters:
+            for cluster in self.coref_clusters:
+                for span in cluster:
+                    for token in span:
                         if token.tag_ == "PRP" and "subj" in token.dep_:
                             self.set_rule(token, "", "null_referential_pronouns")
 
     def it_dobj(self):
         # feature 45
         for token in self.tokens:
-            if (
-                token.pos_ == "VERB"
-                and token.dep_ == "advcl"
-                and token.lemma_ in self.TRANSITIVE_VERBS
-            ):
+            if token.pos_ == "VERB" and token.dep_ == "advcl" and token.lemma_ in self.TRANSITIVE_VERBS:
                 children = {c.dep_ for c in token.children}
-                if (
-                    "mark" in children
-                    and "dobj" not in children
-                    and "prep" not in children
-                ):
+                if "mark" in children and "dobj" not in children and "prep" not in children:
                     self.set_rule(token, f"{token} it", "it_dobj")
 
     def get_referential_it_tokens(self):
         referential_it_tokens = []
-        if self.doc._.coref_clusters:
-            for cluster in self.doc._.coref_clusters:
-                for span in cluster.mentions:
-                    for token_idx in range(span.start, span.end):
-                        token = self.doc[token_idx]
+        if self.coref_clusters:
+            for cluster in self.coref_clusters:
+                for span in cluster:
+                    for token in span:
                         if token.lower_ == "it" and token.head.lower_ == "is":
                             referential_it_tokens.append(token)
         return referential_it_tokens
@@ -880,24 +828,15 @@ class BaseDialect(object):
                 if not any([c.dep_ in self.NOUN_MOD_DEPS for c in token.children]):
                     lemma = self.inflector.singularize(token.text)
                     if lemma and lemma != token.lower_:
-                        self.set_rule(
-                            token, f"{preposition} {lemma}", "plural_preposed"
-                        )
+                        self.set_rule(token, f"{preposition} {lemma}", "plural_preposed")
 
     def plural_postposed(self, postposition="them"):
         for token in self.tokens:
             if token.tag_ == "NNS":
                 lemma = self.inflector.singularize(token.text)
-                if not any(
-                    [
-                        (c.dep_ in self.NOUN_MOD_DEPS) and (c.i > token.i)
-                        for c in token.children
-                    ]
-                ):
+                if not any([(c.dep_ in self.NOUN_MOD_DEPS) and (c.i > token.i) for c in token.children]):
                     if lemma and lemma != token.lower_:
-                        self.set_rule(
-                            token, f"{lemma} {postposition}", "plural_postposed"
-                        )
+                        self.set_rule(token, f"{lemma} {postposition}", "plural_postposed")
 
     def plural_suffix(self, text):
         if text[-1] in {"s", "x", "z"} or text[-2:] in {"sh", "ch"}:
@@ -978,15 +917,11 @@ class BaseDialect(object):
                             "these",
                             "those",
                         }:  # demonstratives
-                            self.set_rule(
-                                det, f"{det.text} {double_det}", "double_determiners"
-                            )
+                            self.set_rule(det, f"{det.text} {double_det}", "double_determiners")
                             self.set_rule(prep, "", "double_determiners")
                             self.set_rule(pobj, "", "double_determiners")
                     else:  # no determiner so add one before the transposable NP
-                        transposable_NP = self.build_transposable_NP_limited(
-                            token, "double_determiners"
-                        )
+                        transposable_NP = self.build_transposable_NP_limited(token, "double_determiners")
                         self.set_rule(
                             token,
                             f"{double_det} {transposable_NP}",
@@ -1017,11 +952,7 @@ class BaseDialect(object):
 
     def remove_det(self, which={"a", "an", "the"}, name="remove_det"):
         for token in self.tokens:
-            if (
-                token.pos_ == "DET"
-                and token.lemma_ in which
-                and (not self.noun_is_modified(token.head))
-            ):
+            if token.pos_ == "DET" and token.lemma_ in which and (not self.noun_is_modified(token.head)):
                 self.set_rule(token, "", name)
 
     def remove_det_definite(self):
@@ -1045,9 +976,7 @@ class BaseDialect(object):
         # feature 64
         for token in self.tokens:
             if (
-                (
-                    token.tag_ == "NN"
-                )  # or (token.tag_ == "NNP" and not self.is_capitalized(token.text))
+                (token.tag_ == "NN")  # or (token.tag_ == "NNP" and not self.is_capitalized(token.text))
                 and token.lower_ in self.NOUN_CONCRETENESS
                 and self.NOUN_CONCRETENESS[token.lower_] <= concrete_max
                 and not any([c.dep_ in self.NOUN_MOD_DEPS for c in token.children])
@@ -1093,9 +1022,7 @@ class BaseDialect(object):
                 # and random.random() < p
             ):
                 demonstrative = "that" if token.head.tag_ == "NN" else "those"
-                self.set_rule(
-                    token, demonstrative, "demonstrative_for_definite_articles"
-                )
+                self.set_rule(token, demonstrative, "demonstrative_for_definite_articles")
 
     def those_them(self):
         # feature 68
@@ -1110,13 +1037,9 @@ class BaseDialect(object):
         for token in self.tokens:
             if token.dep_ == "det":
                 if token.lower_ in {"this", "these"}:
-                    self.set_rule(
-                        token, f"{token.text} here", "proximal_distal_demonstratives"
-                    )
+                    self.set_rule(token, f"{token.text} here", "proximal_distal_demonstratives")
                 elif token.lower_ in {"that", "those"}:
-                    self.set_rule(
-                        token, f"{token.text} there", "proximal_distal_demonstratives"
-                    )
+                    self.set_rule(token, f"{token.text} there", "proximal_distal_demonstratives")
 
     def demonstrative_no_number(self):
         # feature 71
@@ -1134,21 +1057,9 @@ class BaseDialect(object):
                 for c in head.children:
                     if c.dep_ == "nsubj":
                         subj = c
-                if (
-                    head.dep_ == "ROOT"
-                    and head.lower_ == "have"
-                    and subj
-                    and subj.text == "I"
-                ):
-                    transposable_NP = self.build_transposable_NP_limited(
-                        token, "existential_possessives"
-                    )
-                    copula = (
-                        "are"
-                        if (token.dep_ in {"NNS", "NNPS"})
-                        or (token.lower_ in self.MASS_NOUNS)
-                        else "is"
-                    )
+                if head.dep_ == "ROOT" and head.lower_ == "have" and subj and subj.text == "I":
+                    transposable_NP = self.build_transposable_NP_limited(token, "existential_possessives")
+                    copula = "are" if (token.dep_ in {"NNS", "NNPS"}) or (token.lower_ in self.MASS_NOUNS) else "is"
                     self.set_rule(
                         subj,
                         f"{transposable_NP} {copula} there",
@@ -1196,9 +1107,7 @@ class BaseDialect(object):
         # feature 76
         self.possessives(belong=True, before=False, name="possessives_belong")
 
-    def build_transposable_NP_limited(
-        self, token, name, deps={"compound", "case", "clf", "amod", "nummod", "poss"}
-    ):
+    def build_transposable_NP_limited(self, token, name, deps={"compound", "case", "clf", "amod", "nummod", "poss"}):
         components = [token]
         for child in token.children:
             if (child.tag_ == "DT") or (child.dep_ in deps):
@@ -1268,12 +1177,8 @@ class BaseDialect(object):
         for token in self.tokens:
             if token.tag_ == "JJS" and token.lower_ not in {"most", "fewest", "least"}:
                 decision = random.random()
-                replace = (
-                    "most " + token.lemma_ if decision < p else "most " + token.text
-                )
-                transformation_name = (
-                    "analytic_superlative" if decision < p else "double_superlative"
-                )
+                replace = "most " + token.lemma_ if decision < p else "most " + token.text
+                transformation_name = "analytic_superlative" if decision < p else "double_superlative"
                 self.set_rule(token, replace, transformation_name)
                 for c in token.head.children:
                     if c.tag_ == "DT" and c.lemma_ == "an":
@@ -1299,9 +1204,7 @@ class BaseDialect(object):
     def comparative_than(self):
         # feature 84
         for token in self.tokens:
-            if (
-                token.lower_ == "than" and token.dep_ == "prep"
-            ):  # not quantmod (e.g. "two is more than one")
+            if token.lower_ == "than" and token.dep_ == "prep":  # not quantmod (e.g. "two is more than one")
                 if token.head.tag_ in {"RBR", "JJR"} and token.head.lower_ == "more":
                     self.set_rule(token.head, "", "comparative_than")
                 else:
@@ -1312,9 +1215,7 @@ class BaseDialect(object):
     def comparative_more_and(self):
         # feature 85
         for token in self.tokens:
-            if (
-                token.lower_ == "than" and token.dep_ == "prep"
-            ):  # not quantmod (e.g. "two is more than one")
+            if token.lower_ == "than" and token.dep_ == "prep":  # not quantmod (e.g. "two is more than one")
                 if token.head.tag_ in {"RBR", "JJR"} and token.head.lower_ == "more":
                     self.set_rule(token, "and", "comparative_more_and")
                 else:
@@ -1334,12 +1235,7 @@ class BaseDialect(object):
             if (
                 token.tag_ == "JJ"
                 and token.head.pos_ == "NOUN"
-                and not any(
-                    [
-                        c.dep_ in {"compound", "case", "clf", "nummod", "poss"}
-                        for c in token.head.children
-                    ]
-                )
+                and not any([c.dep_ in {"compound", "case", "clf", "nummod", "poss"} for c in token.head.children])
             ):
                 adj = self.build_transposable_conj(token, "adj_postfix")
                 self.set_rule(token, "", "adj_postfix")
@@ -1367,9 +1263,7 @@ class BaseDialect(object):
             modify = False
             swap_aux = None
             if token.lemma_ not in {"be", "do", "have", "get"}:
-                if token.tag_ in {"VBP", "VBZ"} and not self.has_aux(
-                    token
-                ):  # simple present
+                if token.tag_ in {"VBP", "VBZ"} and not self.has_aux(token):  # simple present
                     modify = True
                 elif token.tag_ == "VB":
                     modify = True
@@ -1392,33 +1286,22 @@ class BaseDialect(object):
                         self.set_rule(swap_aux, cop, "progressives")
                         self.set_rule(token, token._.inflect("VBG"), "progressives")
                     else:
-                        self.set_rule(
-                            token, f"{cop} {token._.inflect('VBG')}", "progressives"
-                        )
+                        self.set_rule(token, f"{cop} {token._.inflect('VBG')}", "progressives")
 
     def standing_stood(self):
         # feature 95
         for token in self.tokens:
-            if (
-                token.lower_ == "standing"
-                and token.pos_ == "VERB"
-                and "nsubj" in {c.dep_ for c in token.children}
-            ):
+            if token.lower_ == "standing" and token.pos_ == "VERB" and "nsubj" in {c.dep_ for c in token.children}:
                 self.set_rule(token, "stood", "standing_stood")
 
-    def resultative_past_participle(
-        self, require_expletive=False, name="resultative_past_participle"
-    ):
+    def resultative_past_participle(self, require_expletive=False, name="resultative_past_participle"):
         for token in self.tokens:
             if token.dep_ == "relcl" and token.tag_ == "VBD":
                 subj = None
                 for c in token.children:
                     if c.dep_ == "nsubj" and c.lower_ in {"who", "that"}:
                         subj = c
-                if subj and (
-                    (not require_expletive)
-                    or ("expl" in {c.dep_ for c in token.head.head.children})
-                ):
+                if subj and ((not require_expletive) or ("expl" in {c.dep_ for c in token.head.head.children})):
                     self.set_rule(token, token._.inflect("VBN"), name)
                     self.set_rule(subj, "", name)
 
@@ -1449,13 +1332,9 @@ class BaseDialect(object):
                 if has and subj and (not mod):
                     for child in token.children:
                         if child.dep_ == "dobj":
-                            obj = self.build_transposable_NP(
-                                child, "medial_object_perfect", clear_components=True
-                            )
+                            obj = self.build_transposable_NP(child, "medial_object_perfect", clear_components=True)
                 if has and obj:
-                    self.set_rule(
-                        token, f"{obj} {token.lower_}", "medial_object_perfect"
-                    )
+                    self.set_rule(token, f"{obj} {token.lower_}", "medial_object_perfect")
 
     def after_perfect(self):
         # feature 98
@@ -1472,15 +1351,8 @@ class BaseDialect(object):
                     elif child.dep_ == "nsubj":
                         nsubj = child
                 if nsubj and aux:
-                    copula = (
-                        "are"
-                        if (nsubj.dep_ in {"NNS", "NNPS"})
-                        or (nsubj.lower_ in self.MASS_NOUNS)
-                        else "is"
-                    )
-                    self.set_rule(
-                        token, f'after {token._.inflect("VBG")}', "after_perfect"
-                    )
+                    copula = "are" if (nsubj.dep_ in {"NNS", "NNPS"}) or (nsubj.lower_ in self.MASS_NOUNS) else "is"
+                    self.set_rule(token, f'after {token._.inflect("VBG")}', "after_perfect")
                     self.set_rule(aux, copula, "after_perfect")
                     if mod:
                         self.set_rule(mod, "", "after_perfect")
@@ -1493,11 +1365,7 @@ class BaseDialect(object):
         for token in self.tokens:
             change_token = False
             decision = random.random()
-            name = (
-                "simple_past_for_present_perfect"
-                if decision < p
-                else "present_for_exp_perfect"
-            )
+            name = "simple_past_for_present_perfect" if decision < p else "present_for_exp_perfect"
 
             if token.tag_ == "VBN" and not self.has_additional_aux(token):
                 for child in token.children:
@@ -1571,12 +1439,7 @@ class BaseDialect(object):
         for token in self.tokens:
             if token.dep_ == "ROOT" and token.pos_ == "VERB":
                 c_deps = {c.dep_ for c in token.children}
-                if not len(
-                    {"aux", "cop", "mark", "advmod", "expl", "vocative"}.intersection(
-                        c_deps
-                    )
-                ):
-
+                if not len({"aux", "cop", "mark", "advmod", "expl", "vocative"}.intersection(c_deps)):
                     do = None
                     verb_number = self.get_verb_number(token)
                     if token.tag_ in {"VBZ", "VBP", "VB"}:
@@ -1587,9 +1450,7 @@ class BaseDialect(object):
                     elif token.tag_ == "VBD":
                         do = "did"
                     if do:
-                        self.set_rule(
-                            token, f"{do} {token._.inflect('VB')}", "do_tense_marker"
-                        )
+                        self.set_rule(token, f"{do} {token._.inflect('VB')}", "do_tense_marker")
 
     def completive_been_done(self, drop_aux=False, name="completive_done"):
         """Implements completive done"""
@@ -1598,20 +1459,11 @@ class BaseDialect(object):
                 # if the verb is done/been, we don't want to duplicate it
                 continue
             if token.tag_ == "VBD":
-                if any(
-                    [
-                        child.dep_ == "npadvmod" or child.lemma_ in {"already", "ago"}
-                        for child in token.children
-                    ]
-                ):
+                if any([child.dep_ == "npadvmod" or child.lemma_ in {"already", "ago"} for child in token.children]):
                     self.set_rule(token, f"done {token.text}", name)
             elif token.tag_ == "VBN":
                 for child in token.children:
-                    if (
-                        child.dep_ == "aux"
-                        and child.lemma_ == "have"
-                        and not self.is_contraction(child)
-                    ):
+                    if child.dep_ == "aux" and child.lemma_ == "have" and not self.is_contraction(child):
                         replace = "done" if drop_aux else f"{child} done"
                         self.set_rule(child, replace, name)
 
@@ -1626,11 +1478,7 @@ class BaseDialect(object):
     def irrealis_be_done(self):
         # feature 106
         for token in self.tokens:
-            if (
-                token.dep_ == "mark"
-                and token.lower_ == "if"
-                and token.head.dep_ == "advcl"
-            ):
+            if token.dep_ == "mark" and token.lower_ == "if" and token.head.dep_ == "advcl":
                 # add 'be done' before ROOT in subordinate clause (token.head.head) and remove any other auxiliaries
                 self.set_rule(
                     token.head.head,
@@ -1643,11 +1491,7 @@ class BaseDialect(object):
 
     def perfect_alternative(self, alternative, name):
         for token in self.tokens:
-            if (
-                token.tag_ == "VBN"
-                and token.lemma_ != "be"
-                and not self.has_additional_aux(token)
-            ):
+            if token.tag_ == "VBN" and token.lemma_ != "be" and not self.has_additional_aux(token):
                 subj = self.get_subj(token)
 
                 for child in token.children:
@@ -1702,11 +1546,7 @@ class BaseDialect(object):
         for token in self.tokens:
             if token.dep_ == "ROOT" and token.tag_ == "VBD":
                 c_deps = {c.dep_ for c in token.children}
-                if not len(
-                    {"aux", "cop", "mark", "advmod", "expl", "vocative"}.intersection(
-                        c_deps
-                    )
-                ):
+                if not len({"aux", "cop", "mark", "advmod", "expl", "vocative"}.intersection(c_deps)):
                     self.set_rule(token, f"been {token.lower_}", "past_been")
 
     def bare_perfect(self):
@@ -1766,10 +1606,7 @@ class BaseDialect(object):
                 for child in token.head.children:
                     if child.dep_ == "nsubj" and child.i < token.i:
                         copula = (
-                            "are"
-                            if (child.dep_ in {"NNS", "NNPS"})
-                            or (child.lower_ in self.MASS_NOUNS)
-                            else "is"
+                            "are" if (child.dep_ in {"NNS", "NNPS"}) or (child.lower_ in self.MASS_NOUNS) else "is"
                         )
                         replace_ = replace
                         if will_add_phrasal:
@@ -1845,9 +1682,7 @@ class BaseDialect(object):
         # feature 123
         for token in self.tokens:
             if token.tag_ == "MD" and token.lower_ in self.PAST_MODAL_MAPPING.keys():
-                self.set_rule(
-                    token, self.PAST_MODAL_MAPPING[token.lower_], "present_modals"
-                )
+                self.set_rule(token, self.PAST_MODAL_MAPPING[token.lower_], "present_modals")
 
     def finna_future(self):
         # feature 126
@@ -1872,11 +1707,7 @@ class BaseDialect(object):
     def regularized_or_bare_past_tense(self, p_bare=0.5):
         # allows for a stochastic mixture between features 128 and 129
         for token in self.tokens:
-            if (
-                token.tag_ == "VBD"
-                and token.lemma_ not in {"be", "do", "have"}
-                and not self.has_aux(token)
-            ):
+            if token.tag_ == "VBD" and token.lemma_ not in {"be", "do", "have"} and not self.has_aux(token):
                 base = token._.inflect("VB", form_num=0)
                 if random.random() < p_bare:
                     regularized = base
@@ -1913,11 +1744,7 @@ class BaseDialect(object):
     def participle_or_bare_past_tense(self, p_bare=0.5):
         # allows for a stochastic mixture between features 131, 132
         for token in self.tokens:
-            if (
-                token.tag_ == "VBD"
-                and token.lemma_ not in {"be", "do", "have"}
-                and not self.has_aux(token)
-            ):
+            if token.tag_ == "VBD" and token.lemma_ not in {"be", "do", "have"} and not self.has_aux(token):
                 if random.random() < p_bare:
                     regularized = token._.inflect("VB", form_num=0)
                     if regularized != token.text:
@@ -1989,9 +1816,7 @@ class BaseDialect(object):
     def conditional_were_was(self, name="conditional_were_was"):
         # feature 147
         for token in self.tokens:
-            if token.lower_ == "were" and (
-                (token.dep_ == "advcl") or ("if" in {c.lower_ for c in token.children})
-            ):
+            if token.lower_ == "were" and ((token.dep_ == "advcl") or ("if" in {c.lower_ for c in token.children})):
                 self.set_rule(token, "was", name)
 
     def serial_verb_give(self):
@@ -2053,9 +1878,7 @@ class BaseDialect(object):
 
                     clause_origin = self.get_clause_origin(token)
                     left_edge = self.subtree_min_idx(token, use_doc_index=True)
-                    left = " ".join(
-                        [x.text for x in self.tokens[: left_edge + 1] if x.text != subj]
-                    )
+                    left = " ".join([x.text for x in self.tokens[: left_edge + 1] if x.text != subj])
 
                     self.set_rule(
                         clause_origin,
@@ -2069,18 +1892,16 @@ class BaseDialect(object):
         aint = aint or self.aint
         for token in self.tokens:
             # if the token is a negation of a verbal head then
-            if (
-                (token.dep_ == "neg") or (token.lower_ in self.NEGATIVES.values())
-            ) and (token.head.pos_ in {"VERB", "AUX"}):
+            if ((token.dep_ == "neg") or (token.lower_ in self.NEGATIVES.values())) and (
+                token.head.pos_ in {"VERB", "AUX"}
+            ):
                 neg = ""
                 for val in self.NEGATIVES.values():
                     if token.lower_ == val:
                         neg = val
                         break
                 # consider special ain't for non-contractions
-                if (token.head.lemma_ == "be") and not len(
-                    set(self.get_full_word(token)).intersection({"'", "’"})
-                ):
+                if (token.head.lemma_ == "be") and not len(set(self.get_full_word(token)).intersection({"'", "’"})):
                     if aint:
                         self.set_rule(token.head, "ain't", name)
                     else:
@@ -2089,9 +1910,7 @@ class BaseDialect(object):
 
                 for child in token.head.children:
                     # Find the object child and check that it is an indefinite noun
-                    if (child.dep_ in self.OBJECTS) and self.is_indefinite_noun(
-                        child
-                    ):  # \
+                    if (child.dep_ in self.OBJECTS) and self.is_indefinite_noun(child):  # \
                         # or ((child.dep_ in {'advmod'}) and (child.pos_ in {'ADV', 'ADJ'})):
                         if str(child) in list(self.NEGATIVES.keys()):
                             # there is a special NPI word that is the negation of this one
@@ -2145,15 +1964,10 @@ class BaseDialect(object):
     def never_negator(self, name="never_negator"):
         # feature 159
         for token in self.tokens:
-
-            if (
-                (token.dep_ == "neg")
-                and (token.head.tag_ == "VB")
-                and (token.head.lemma_ != "be")
-            ):
+            print(token, token.dep_)
+            if (token.dep_ == "neg") and (token.head.tag_ == "VB") and (token.head.lemma_ != "be"):
                 for c in token.head.children:
                     if c.lower_ == "did":
-
                         num = self.get_verb_number(token.head)
                         replace = token.head._.inflect("VBD", form_num=num)
 
@@ -2218,9 +2032,7 @@ class BaseDialect(object):
                         if any_:
                             self.set_rule(any_, "", name)
                         if subj.lower_ in self.NEGATIVES_NO_MORE:
-                            self.set_rule(
-                                subj, self.NEGATIVES_NO_MORE[subj.lower_], name
-                            )
+                            self.set_rule(subj, self.NEGATIVES_NO_MORE[subj.lower_], name)
 
     def wasnt_werent(self, name="wasnt_werent"):
         # feature 163
@@ -2250,12 +2062,7 @@ class BaseDialect(object):
                         else:
                             aux = c
 
-                if (
-                    subj
-                    and ((subj.lower_ == "i") or (not first_person_subj))
-                    and (not multiple_aux)
-                    and (not wh)
-                ):
+                if subj and ((subj.lower_ == "i") or (not first_person_subj)) and (not multiple_aux) and (not wh):
                     predicate = [
                         component
                         for component in self.get_subtree_components_limited(token, [])
@@ -2267,9 +2074,7 @@ class BaseDialect(object):
                     if token.lemma_ == "be" and subj.idx > token.idx and not aux:
                         # this next check is to avoid manipulating non-question inversions
                         # like "Rarely does one see a Manx cat" or "Not since I was a kid have I felt so scared."
-                        if (not len(sorted_children)) or (
-                            sorted_children[0].idx >= token.idx
-                        ):
+                        if (not len(sorted_children)) or (sorted_children[0].idx >= token.idx):
                             # "Are you...?" | "Is that...?"
                             if fronted:
                                 self.set_rule(
@@ -2288,9 +2093,7 @@ class BaseDialect(object):
                     elif aux and aux.lemma_ == "do" and aux.idx < subj.idx:
                         # this next check is to avoid manipulating non-question inversions
                         # like "Rarely does one see a Manx cat" or "Not since I was a kid have I felt so scared."
-                        if (not len(sorted_children)) or (
-                            sorted_children[0].idx >= aux.idx
-                        ):
+                        if (not len(sorted_children)) or (sorted_children[0].idx >= aux.idx):
                             # "Did you...?"
                             if fronted:
                                 self.set_rule(
@@ -2310,9 +2113,7 @@ class BaseDialect(object):
                     elif aux and aux.idx < subj.idx:
                         # this next check is to avoid manipulating non-question inversions
                         # like "Rarely does one see a Manx cat" or "Not since I was a kid have I felt so scared."
-                        if (not len(sorted_children)) or (
-                            sorted_children[0].idx >= aux.idx
-                        ):
+                        if (not len(sorted_children)) or (sorted_children[0].idx >= aux.idx):
                             # Other forms of questions by inverting the auxiliary (non-wh)
                             if fronted:
                                 self.set_rule(
@@ -2376,32 +2177,24 @@ class BaseDialect(object):
         """
         for token in self.tokens:
             # we don't want to change contractions or irregulars
-            if (token.lower_ not in {"am", "is", "are"}) and (
-                not self.is_contraction(token)
-            ):
+            if (token.lower_ not in {"am", "is", "are"}) and (not self.is_contraction(token)):
                 if token.tag_ in {"VBZ", "VBP"}:  # simple present tense verb
                     uninflected = token._.inflect("VBP", form_num=0)
                     if not uninflected:
                         continue
-                    if token.text != str(
-                        uninflected
-                    ):  # we need to remember this change
+                    if token.text != str(uninflected):  # we need to remember this change
                         self.set_rule(token, uninflected, "uninflect")
 
     def generalized_third_person_s(self):
         # feature 171
         for token in self.tokens:
             # we don't want to change contractions or irregulars
-            if (token.lower_ not in {"am", "is", "are"}) and (
-                not self.is_contraction(token)
-            ):
+            if (token.lower_ not in {"am", "is", "are"}) and (not self.is_contraction(token)):
                 if token.tag_ == "VBP":  # simple present tense verb
                     uninflected = token._.inflect("VBZ")
                     if not uninflected:
                         continue
-                    if token.text != str(
-                        uninflected
-                    ):  # we need to remember this change
+                    if token.text != str(uninflected):  # we need to remember this change
                         self.set_rule(token, uninflected, "generalized_third_person_s")
 
     def existential_there_it(self, p=0, name="existential_there_it"):
@@ -2437,19 +2230,13 @@ class BaseDialect(object):
         name="drop_aux",
     ):
         def gonna(token):
-            return (token.lower_ in {"gonna", "gunna"}) or (
-                token.lemma_ in {"go", "gon"}
-            )
+            return (token.lower_ in {"gonna", "gunna"}) or (token.lemma_ in {"go", "gon"})
 
         def wh_question(token):
-            return ("?" in {c.lemma_ for c in token.head.children}) or (
-                token.tag_ in {"WDT", "WP", "WP$", "WRB"}
-            )
+            return ("?" in {c.lemma_ for c in token.head.children}) or (token.tag_ in {"WDT", "WP", "WP$", "WRB"})
 
         def yn_question(token):
-            return ("?" in {c.lemma_ for c in token.head.children}) or (
-                token.lemma_ == "do"
-            )
+            return ("?" in {c.lemma_ for c in token.head.children}) or (token.lemma_ == "do")
 
         def progressive(token):
             return token.head.tag_ == "VBG"
@@ -2458,37 +2245,24 @@ class BaseDialect(object):
             return any([(c.dep_ == "attr") and (c.i > token.i) for c in token.children])
 
         def before_AP(token):
-            return any(
-                [
-                    (c.dep_ == "acomp") and (c.tag_ == "JJ") and (c.i > token.i)
-                    for c in token.children
-                ]
-            )
+            return any([(c.dep_ == "acomp") and (c.tag_ == "JJ") and (c.i > token.i) for c in token.children])
 
         def before_locative(token):
             return any([(c.tag_ == "IN") and (c.i > token.i) for c in token.children])
 
         for token in self.tokens:
-
             if (token.lemma_ == "be") or (not be_filter):
                 if (token.lemma_ == "have") or (not have_filter):
                     if wh_question(token) or not consider_wh_questions:
                         if yn_question(token) or not consider_yn_questions:
-                            if not self.is_contraction(
-                                token
-                            ):  # we don't want to change contractions
+                            if not self.is_contraction(token):  # we don't want to change contractions
                                 if token.lemma_ == "be":  # copulas are a separate case
                                     if (
                                         (not gonna_filter or gonna(token.head))
-                                        and (
-                                            not progressive_filter or progressive(token)
-                                        )
+                                        and (not progressive_filter or progressive(token))
                                         and (not NP_filter or before_NP(token))
                                         and (not AP_filter or before_AP(token))
-                                        and (
-                                            not locative_filter
-                                            or before_locative(token)
-                                        )
+                                        and (not locative_filter or before_locative(token))
                                     ):
                                         if token.lower_ in {"is", "are"}:
                                             # we don't want to mess with relative clauses
@@ -2499,42 +2273,25 @@ class BaseDialect(object):
                                                 and ("comp" not in token.dep_)
                                                 and (
                                                     not len(list(token.children))
-                                                    or not any(
-                                                        [
-                                                            c.dep_ in {"ccomp", "expl"}
-                                                            for c in token.children
-                                                        ]
-                                                    )
+                                                    or not any([c.dep_ in {"ccomp", "expl"} for c in token.children])
                                                 )
                                             ):  # and (token.dep_ != 'ROOT'):
-                                                self.set_rule(
-                                                    token, "", name
-                                                )  # drop copula
+                                                self.set_rule(token, "", name)  # drop copula
                                         else:
                                             pass  # don't change past-tense copula
-                                elif (token.dep_ == "aux") and (
-                                    token.head.dep_ != "xcomp"
-                                ):
+                                elif (token.dep_ == "aux") and (token.head.dep_ != "xcomp"):
                                     if (
                                         (not gonna_filter or gonna(token.head))
-                                        and (
-                                            not progressive_filter or progressive(token)
-                                        )
+                                        and (not progressive_filter or progressive(token))
                                         and (not NP_filter or before_NP(token))
                                         and (not AP_filter or before_AP(token))
-                                        and (
-                                            not locative_filter
-                                            or before_locative(token)
-                                        )
+                                        and (not locative_filter or before_locative(token))
                                     ):
                                         # next, look at other auxilliaries that are not complements
                                         if str(token) == "will":
-                                            self.set_rule(
-                                                token, "gon", name
-                                            )  # future tense
+                                            self.set_rule(token, "gon", name)  # future tense
                                         elif (token.head.lemma_ != "be") and not (
-                                            self.is_negated(token.head)
-                                            or self.is_modal(token)
+                                            self.is_negated(token.head) or self.is_modal(token)
                                         ):
                                             self.set_rule(token, "", name)  # drop
 
@@ -2665,9 +2422,7 @@ class BaseDialect(object):
 
     def relativizer_where(self):
         # feature 189
-        self.relativizer(
-            replace={"that", "which"}, replace_with=["where"], name="relativizer_where"
-        )
+        self.relativizer(replace={"that", "which"}, replace_with=["where"], name="relativizer_where")
 
     def who_what(self):
         # feature 190
@@ -2699,9 +2454,7 @@ class BaseDialect(object):
         name="analytic_relativizer",
     ):
         for token in self.tokens:
-            if token.lower_ in replace and (
-                token.head.dep_ == "relcl" or token.head.head.dep_ == "relcl"
-            ):
+            if token.lower_ in replace and (token.head.dep_ == "relcl" or token.head.head.dep_ == "relcl"):
                 replace_w = replace_with.copy()
                 if use_gender_pronoun and token.head.head.head.lower_ in {
                     "man",
@@ -2756,9 +2509,7 @@ class BaseDialect(object):
         for token in self.tokens:
             if token.dep_ == "relcl" and token.pos_ == "VERB" and token.lemma_ != "be":
                 pronoun = "it"
-                if (token.head.tag_ in {"NNS", "NNPS"}) or self.token_is_human(
-                    token.head
-                ):
+                if (token.head.tag_ in {"NNS", "NNPS"}) or self.token_is_human(token.head):
                     pronoun = "them"
 
                 valid = True
@@ -2782,13 +2533,9 @@ class BaseDialect(object):
     def one_relativizer(self):
         # feature 195
         for token in self.tokens:
-            if (
-                token.dep_ == "nsubj" and token.head.dep_ == "ROOT"
-            ):  # the matrix subject
+            if token.dep_ == "nsubj" and token.head.dep_ == "ROOT":  # the matrix subject
                 sc = self.get_subtree_components_limited(token, [])
-                subject_components = [
-                    component for component in sc if component.tag_ not in {"WP", "WDT"}
-                ]
+                subject_components = [component for component in sc if component.tag_ not in {"WP", "WDT"}]
                 replace = " ".join([c.text for c in subject_components] + ["one"])
                 self.set_rule(token, replace, "one_relativizer")
                 for component in sc:
@@ -2852,7 +2599,9 @@ class BaseDialect(object):
                         self.set_rule(token, "", "reduced_relative")
                         self.set_rule(
                             token.head,
-                            f"{self.build_complete_phrase(list(c.children)[0], name='reduced_relative')} {token.text} {token.head.text}",
+                            (
+                                f"{self.build_complete_phrase(list(c.children)[0], name='reduced_relative')} {token.text} {token.head.text}"
+                            ),
                             "reduced_relative",
                         )
 
@@ -2862,16 +2611,12 @@ class BaseDialect(object):
             if token.lemma_ in self.SPEAK_VERBS or token.lemma_ in {"hear", "overhear"}:
                 for child in token.children:
                     if child.dep_ == "ccomp":
-                        sorted_c = sorted(
-                            [c for c in child.children], key=lambda c: c.i
-                        )
+                        sorted_c = sorted([c for c in child.children], key=lambda c: c.i)
                         if len(sorted_c):
                             first_complement_token = sorted_c[0]
                             if first_complement_token.dep_ == "mark":
                                 # token is the complementizer, so we can replace it with say
-                                self.set_rule(
-                                    first_complement_token, "say", "say_complementizer"
-                                )
+                                self.set_rule(first_complement_token, "say", "say_complementizer")
                             else:
                                 # complementizer is implicit, so we can just concatenate along with this left token
                                 self.set_rule(
@@ -2905,21 +2650,13 @@ class BaseDialect(object):
     def what_comparative(self):
         # feature 204
         for token in self.tokens:
-            if (
-                token.lemma_ == "than"
-                and token.dep_ == "mark"
-                and token.head.head.tag_ == "JJR"
-            ):
+            if token.lemma_ == "than" and token.dep_ == "mark" and token.head.head.tag_ == "JJR":
                 self.set_rule(token, "than what", "what_comparative")
 
     def existential_got(self):
         # feature 205
         for token in self.tokens:
-            if (
-                (token.dep_ == "expl")
-                and (token.lower_ == "there")
-                and (token.head.lemma_ == "be")
-            ):
+            if (token.dep_ == "expl") and (token.lower_ == "there") and (token.head.lemma_ == "be"):
                 self.set_rule(token, "got", "existential_got")
                 self.set_rule(token.head, "", "existential_got")
 
@@ -2927,22 +2664,14 @@ class BaseDialect(object):
         # feature 206
         for token in self.tokens:
             # this transformation isn't specified when the object is negated
-            if (
-                (token.dep_ == "expl")
-                and (token.lower_ == "there")
-                and (not self.is_negated(token.head))
-            ):
+            if (token.dep_ == "expl") and (token.lower_ == "there") and (not self.is_negated(token.head)):
                 self.set_rule(token, "you have", "existential_you_have")
                 self.set_rule(token.head, "", "existential_you_have")
 
     def existential_transformations(self, p=0.5):
         # feature 172, 173, 205, 206
         for token in self.tokens:
-            if (
-                (token.dep_ == "expl")
-                and (token.lower_ == "there")
-                and (not self.is_negated(token.head))
-            ):
+            if (token.dep_ == "expl") and (token.lower_ == "there") and (not self.is_negated(token.head)):
                 if random.random() < p:
                     replace = "dey"
                     if random.random() < p:
@@ -2962,25 +2691,16 @@ class BaseDialect(object):
             subj = ""
             children_tags = {c.tag_ for c in token.children}
             children_deps = {c.dep_ for c in token.children}
-            if (
-                token.dep_ in {"ccomp"}
-                and token.tag_ == "VB"
-                and "TO" in children_tags
-                and "nsubj" in children_deps
-            ):
+            if token.dep_ in {"ccomp"} and token.tag_ == "VB" and "TO" in children_tags and "nsubj" in children_deps:
                 for c in token.children:
                     if c.tag_ == "TO":
                         self.set_rule(c, "", "that_infinitival_subclause")
                     elif c.dep_ == "nsubj":
                         self.set_rule(c, "", "that_infinitival_subclause")
                         subj = self.inflect_subject(
-                            self.build_transposable_NP(
-                                c, "that_infinitival_subclause", clear_components=True
-                            )
+                            self.build_transposable_NP(c, "that_infinitival_subclause", clear_components=True)
                         )
-                self.set_rule(
-                    token, f"that {subj} should {token}", "that_infinitival_subclause"
-                )
+                self.set_rule(token, f"that {subj} should {token}", "that_infinitival_subclause")
 
     def drop_inf_to(self):
         # feature 208
@@ -3029,22 +2749,14 @@ class BaseDialect(object):
         for token in self.tokens:
             # "If" preceeding both the ROOT and the main verb of the relative clause
             # means we can use the chaining construction and simply remove the mark "IF"
-            if (
-                token.lemma_ == "if"
-                and token.idx < self.get_root(token).idx
-                and token.idx < token.head.idx
-            ):
+            if token.lemma_ == "if" and token.idx < self.get_root(token).idx and token.idx < token.head.idx:
                 self.set_rule(token, "", "chaining_main_verbs")
 
     def corr_conjunction_doubling(self):
         # feature 214
         conj_mapping = {"yet": "still", "but": "still", "and": "so"}
         for token in self.tokens:
-            if (
-                token.dep_ == "cc"
-                and token.head.pos_ == "VERB"
-                and token.lower_ in conj_mapping
-            ):
+            if token.dep_ == "cc" and token.head.pos_ == "VERB" and token.lower_ in conj_mapping:
                 for child in token.head.children:
                     if child.dep_ == "conj" and child.pos_ == "VERB":
                         if any(["subj" in c.dep_ for c in child.children]):
@@ -3056,9 +2768,7 @@ class BaseDialect(object):
             elif token.dep_ == "advmod" and token.lemma_ == "still":
                 for child in token.head.children:
                     if child.lemma_ in {"though", "although", "despite"}:
-                        min_idx = self.subtree_min_idx(
-                            token.head, use_doc_index=True, exclude_tags={"IN"}
-                        )
+                        min_idx = self.subtree_min_idx(token.head, use_doc_index=True, exclude_tags={"IN"})
                         self.set_rule(
                             self.tokens[min_idx],
                             f"yet still {self.tokens[min_idx].text}",
@@ -3121,14 +2831,8 @@ class BaseDialect(object):
     def flat_adj_for_adv(self):
         # feature 221
         for token in self.tokens:
-            if (
-                token.tag_ == "RB"
-                and token.head.pos_ == "VERB"
-                and token.lower_ in self.FLAT_ADV_ADJ
-            ):
-                self.set_rule(
-                    token, self.FLAT_ADV_ADJ[token.lower_], "flat_adj_for_adv"
-                )
+            if token.tag_ == "RB" and token.head.pos_ == "VERB" and token.lower_ in self.FLAT_ADV_ADJ:
+                self.set_rule(token, self.FLAT_ADV_ADJ[token.lower_], "flat_adj_for_adv")
 
     def too_sub(self, name="too_sub"):
         # feature 222
@@ -3157,11 +2861,7 @@ class BaseDialect(object):
                         subj = c
                     elif c.dep_ == "aux":
                         aux.append(c)
-                predicate = [
-                    component
-                    for component in self.get_subtree_components(root, [])
-                    if component.i > root.i
-                ]
+                predicate = [component for component in self.get_subtree_components(root, []) if component.i > root.i]
                 if len(predicate) and predicate[-1].dep_ == "punct":
                     predicate = predicate[:-1]
 
@@ -3176,9 +2876,7 @@ class BaseDialect(object):
             subj_components = self.get_subtree_components(subj, [])
             left_subj_token = subj_components[0]
             predicate_text = " ".join([c.text for c in predicate])
-            subj_text = " ".join(
-                [c.lower_ if i == 0 else c.text for i, c in enumerate(subj_components)]
-            )
+            subj_text = " ".join([c.lower_ if i == 0 else c.text for i, c in enumerate(subj_components)])
             # verb_text = ' '.join([c.text for c in sorted([root] + aux, key=lambda t: t.i)])
             # TO DO: check which complementizer to use: that, who, which, etc.
             complementizer = "that"
@@ -3205,9 +2903,7 @@ class BaseDialect(object):
             clause_origin = self.get_clause_origin(token)
             if clause_origin.i < pobj_tokens[0].i:
                 pobjs = " ".join([c.text for c in pobj_tokens])
-                self.set_rule(
-                    clause_origin, f"{pobjs} {clause_origin.text}", "fronting_pobj"
-                )
+                self.set_rule(clause_origin, f"{pobjs} {clause_origin.text}", "fronting_pobj")
                 for p in pobj_tokens:
                     self.set_rule(p, "", "fronting_pobj")
 
@@ -3227,7 +2923,6 @@ class BaseDialect(object):
 
             found_aux = False
             for child in consider.head.children:
-
                 if (child.dep_ == "aux") and (child.lower_ != "to"):
                     found_aux = True
                     if not self.is_contraction(child):
@@ -3255,7 +2950,6 @@ class BaseDialect(object):
                 "ccomp",
                 "xcomp",
             }:
-
                 VERB = token.head
                 if (
                     "TO" in {c.tag_ for c in token.head.children}
@@ -3299,9 +2993,7 @@ class BaseDialect(object):
                             f"{do} {left_subj_token.text}",
                             "inverted_indirect_question",
                         )
-                        self.set_rule(
-                            VERB, VERB._.inflect("VB"), "inverted_indirect_question"
-                        )
+                        self.set_rule(VERB, VERB._.inflect("VB"), "inverted_indirect_question")
 
     def drop_aux_wh(self):
         # feature 228
@@ -3351,23 +3043,15 @@ class BaseDialect(object):
     def superlative_before_matrix_head(self):
         # feature 231
         for token in self.tokens:
-            if (
-                token.lemma_ == "most"
-                and token.dep_ == "advmod"
-                and token.head.dep_ in {"relcl", "nsubj"}
-            ):
+            if token.lemma_ == "most" and token.dep_ == "advmod" and token.head.dep_ in {"relcl", "nsubj"}:
                 hh = token.head.head
                 if hh.dep_ == "nsubj":
-                    self.set_rule(
-                        hh, f"most {hh.text}", "superlative_before_matrix_head"
-                    )
+                    self.set_rule(hh, f"most {hh.text}", "superlative_before_matrix_head")
                     self.set_rule(token, "", "superlative_before_matrix_head")
                 elif hh.dep_ == "ROOT":
                     for c in hh.children:
                         if c.dep_ == "nsubj":
-                            self.set_rule(
-                                c, f"most {c.text}", "superlative_before_matrix_head"
-                            )
+                            self.set_rule(c, f"most {c.text}", "superlative_before_matrix_head")
                             self.set_rule(token, "", "superlative_before_matrix_head")
 
     def double_obj_order(self):
@@ -3430,17 +3114,11 @@ class BaseDialect(object):
     def ass_pronoun(self, p=0.1):
         """Implements ass camouflage constructions, reflexive constructions, and intensifiers"""
         for token in self.tokens:
-            if (token.dep_ in self.OBJECTS) and (
-                token.tag_ == "PRP"
-            ):  # the token is an object pronoun
-                if (
-                    str(token) in self.POSSESSIVES
-                ):  # the token has a possessive counterpart
+            if (token.dep_ in self.OBJECTS) and (token.tag_ == "PRP"):  # the token is an object pronoun
+                if str(token) in self.POSSESSIVES:  # the token has a possessive counterpart
                     self.set_rule(token, self.POSSESSIVES[str(token)] + " ass", "ass")
             elif (
-                (token.dep_ == "amod")
-                and (token.tag_ == "JJ")
-                and self.is_gradable_adjective(str(token))
+                (token.dep_ == "amod") and (token.tag_ == "JJ") and self.is_gradable_adjective(str(token))
             ):  # the token is a gradable adjective modifier
                 if random.random() < p:
                     self.set_rule(token, str(token) + "-ass", "ass")
@@ -3545,11 +3223,7 @@ class BaseDialect(object):
             return False
         elif len(syllables) == 1:
             # We double the final consonant when a mono-syllabic word ends in consonant + vowel + consonant.
-            return (
-                (not self.is_vowel(verb[-3]))
-                and (self.is_vowel(verb[-2]))
-                and (not self.is_vowel(verb[-1]))
-            )
+            return (not self.is_vowel(verb[-3])) and (self.is_vowel(verb[-2])) and (not self.is_vowel(verb[-1]))
         else:
             # We double the final consonant when a multi-syllabic word has its final syllable stressed
             return syllables[-1] > syllables[-2]
@@ -3593,15 +3267,8 @@ class BaseDialect(object):
             (token.pos_ in {"NOUN"})
             and (token.tag_ not in {"PRP", "NNP"})
             and (str(token) not in self.NEGATIVES.values())
-            and not any(
-                [c.dep_ in {"poss", "amod", "neg", "advmod"} for c in token.children]
-            )
-            and not any(
-                [
-                    (c.dep_ == {"det", "nummod"}) and (c.lemma_ not in {"a", "an"})
-                    for c in token.children
-                ]
-            )
+            and not any([c.dep_ in {"poss", "amod", "neg", "advmod"} for c in token.children])
+            and not any([(c.dep_ == {"det", "nummod"}) and (c.lemma_ not in {"a", "an"}) for c in token.children])
         )
 
     def get_children_deps(self, token):
@@ -3614,22 +3281,12 @@ class BaseDialect(object):
             t = t.head
         return t
 
-    def subtree_min_idx(
-        self, token, use_doc_index=False, use_max_idx=False, exclude_tags={}
-    ):
+    def subtree_min_idx(self, token, use_doc_index=False, use_max_idx=False, exclude_tags={}):
         """Returns the minimum character index or the left side of the clause to which @token belongs"""
         indices = []
         for child in token.children:
-            if (
-                ("comp" not in child.dep_)
-                and child.dep_ not in {"punct", "advcl"}
-                and child.tag_ not in exclude_tags
-            ):
-                indices.append(
-                    self.subtree_min_idx(
-                        child, use_doc_index=use_doc_index, use_max_idx=use_max_idx
-                    )
-                )
+            if ("comp" not in child.dep_) and child.dep_ not in {"punct", "advcl"} and child.tag_ not in exclude_tags:
+                indices.append(self.subtree_min_idx(child, use_doc_index=use_doc_index, use_max_idx=use_max_idx))
         if use_doc_index:
             indices.append(token.i)
         else:
@@ -3638,13 +3295,9 @@ class BaseDialect(object):
             return max(indices)
         return min(indices)
 
-    def subtree_max_idx(
-        self, token, use_doc_index=False, use_max_idx=False, exclude_tags={}
-    ):
+    def subtree_max_idx(self, token, use_doc_index=False, use_max_idx=False, exclude_tags={}):
         """Returns the maximum character index or the right side of the clause to which @token belongs"""
-        return self.subtree_min_idx(
-            token, use_doc_index, use_max_idx=True, exclude_tags=exclude_tags
-        )
+        return self.subtree_min_idx(token, use_doc_index, use_max_idx=True, exclude_tags=exclude_tags)
 
     def is_clause_initial(self, token):
         """Returns boolean value indicating whether @token is the first token in its clause (useful for negative inversion)"""
@@ -3685,9 +3338,7 @@ class BaseDialect(object):
         return False
 
     def token_is_human(self, token):
-        return (token.lower_ in self.HUMAN_NOUNS) and (
-            token.pos_ in ["NOUN", "PRON", "PROPN"]
-        )
+        return (token.lower_ in self.HUMAN_NOUNS) and (token.pos_ in ["NOUN", "PRON", "PROPN"])
 
     def get_subj(self, token):
         subj = None
@@ -3717,9 +3368,7 @@ class BaseDialect(object):
             self.get_subtree_components(child, components)
         return sorted(components, key=lambda t: t.i)
 
-    def get_subtree_components_limited(
-        self, token, components=[], exclude_deps={"conj", "cc", "punct"}
-    ):
+    def get_subtree_components_limited(self, token, components=[], exclude_deps={"conj", "cc", "punct"}):
         components.append(token)
         for child in token.children:
             if child.dep_ not in exclude_deps:
@@ -3743,9 +3392,7 @@ class BaseDialect(object):
                 self.set_rule(cand, "", name)
 
         candidates = {(candidate, candidate.idx) for candidate in candidates}
-        return "-".join(
-            [cand[0].text for cand in sorted(candidates, key=lambda x: x[1])]
-        )
+        return "-".join([cand[0].text for cand in sorted(candidates, key=lambda x: x[1])])
 
     def has_clause_subordination_marker(self, verb):
         return any([c.dep_ == "mark" for c in verb.children])
@@ -3804,12 +3451,7 @@ class BaseDialect(object):
 
         executable = []
         options = list(rules.keys())
-        weights = [
-            self.morphosyntax_transforms[f]
-            if f in self.morphosyntax_transforms
-            else 1.0
-            for f in options
-        ]
+        weights = [self.morphosyntax_transforms[f] if f in self.morphosyntax_transforms else 1.0 for f in options]
 
         covered = np.zeros(covered_len)
 
@@ -3881,10 +3523,7 @@ class BaseDialect(object):
             prev_idx = end_idx + 1
 
             compiled += (
-                (
-                    "<a href='%s' title='%s'><mark>"
-                    % (self.executed_rules[indices]["type"], j)
-                )
+                "<a href='%s' title='%s'><mark>" % (self.executed_rules[indices]["type"], j)
                 + self.string[start_idx : end_idx + 1]
                 + "</mark></a>"
             )

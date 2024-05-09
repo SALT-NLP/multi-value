@@ -1,9 +1,12 @@
+stanza==1.8.2
+transformers
+peft
+thinc[torch]
 nltk==3.5
-numpy    
-pandas   
-tqdm     
-spacy-experimental
+numpy 
+pandas
+tqdm
 lemminflect==0.2.2
-spacy
 inflect==5.5.2
 geopy==2.2.0
+spacy==3.7.4

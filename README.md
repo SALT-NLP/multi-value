@@ -17,12 +17,7 @@ pip install -r requirements.txt
 
 3. Install spaCy English pipeline and nltk wordnet
 ```python
-python -m spacy download en_core_web_sm
-python 
->>> import nltk
->>> nltk.download('wordnet')
->>> nltk.download('cmudict')
->>> quit()
+bash downloads.sh
 ```
 
 4. Confirm that your setup is correct by running the unittest
