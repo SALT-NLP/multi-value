@@ -25,13 +25,10 @@ dependencies = [
         "numpy",
         "pandas",
         "tqdm",
-        "neuralcoref==4.0",
+        "spacy-experimental",
         "lemminflect==0.2.2",
-        "spacy==2.1.0",
+        "spacy",
         "inflect==5.5.2",
-        "torch==1.7.1",
-        "transformers==4.16.2",
-        "datasets==2.1.0",
         "geopy==2.2.0"
 ]
 
@@ -40,7 +37,7 @@ include = ["resources/*.json", "resources/*.txt", "resources/*.csv", "resources/
 dev-mode-dirs = [".", "src", "resources"]
 
 [tool.hatch.build.sources]
-"src" = "value"
+"src/value" = "value"
 "resources" = "value/resources"
 
 [tool.hatch.metadata]
