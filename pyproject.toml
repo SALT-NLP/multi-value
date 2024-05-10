@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "value"
+name = "multivalue"
 version = "0.1"
 authors = [
   { name="Will Held", email="wheld3@gatech.edu" },
@@ -39,14 +39,14 @@ include = ["resources/*.json", "resources/*.txt", "resources/*.csv", "resources/
 dev-mode-dirs = [".", "src", "resources"]
 
 [tool.hatch.build.sources]
-"src/value" = "value"
-"resources" = "value/resources"
+"src/multivalue" = "multivalue"
+"resources" = "multivalue/resources"
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["value"]
+packages = ["multivalue"]
 
 [project.urls]
 "Homepage" = "value-nlp.org"
@@ -66,6 +66,4 @@ force_grid_wrap = 0
 use_parentheses = true
 ensure_newline_before_comments = true
 line_length = 119
-src_paths = ["src", "tests"]
-known_haliax = ["haliax"]
-sections=["FUTURE", "STDLIB", "THIRDPARTY", "HALIAX", "FIRSTPARTY", "LOCALFOLDER"]
+src_paths = ["src"]
