@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "multivalue"
-version = "0.1"
+name = "value-nlp"
+version = "0.1.3"
 authors = [
   {name="Will Held", email="wheld3@gatech.edu"},
   {name="Caleb Ziems", email="cjziems@stanford.edu"}
@@ -45,10 +45,11 @@ dev-mode-dirs = [".", "src", "resources"]
 [tool.hatch.metadata]
 allow-direct-references = true
 
-
-[tool.hatch.build.targets.wheel]
+[tool.hatch.build.targets.sdist]
 only-include = ["src", "resources"]
 
+[tool.hatch.build.targets.wheel]
+only-include = ["multivalue"]
 
 [tool.hatch.version]
 [project.urls]
