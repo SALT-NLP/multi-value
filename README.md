@@ -1,7 +1,7 @@
 # Multi-VALUE: The VernAcular Language Understanding Evaluation benchmark 
 
 
-## Setup From PyPi
+## Setup From PyPi For Your Own Projects
 `pip install value-nlp`
 
 ```python
@@ -51,7 +51,7 @@ python -m src.build_coqa_value --dialect chicano &
 python -m src.build_coqa_value --dialect indian &
 python -m src.build_coqa_value --dialect multi &
 python -m src.build_coqa_value --dialect singapore &
-
+```
 
 ## Citation
 ```
