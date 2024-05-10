@@ -169,7 +169,7 @@ class BaseDialect(object):
 
     def relatavize_file(self, file_name):
         dirname = os.path.dirname(__file__)
-        return os.path.join(dirname, "../../", file_name)
+        return os.path.join(dirname, "./", file_name)
 
     def set_seed(self, seed):
         random.seed(seed)
@@ -1967,7 +1967,6 @@ class BaseDialect(object):
     def never_negator(self, name="never_negator"):
         # feature 159
         for token in self.tokens:
-            print(token, token.dep_)
             if (token.dep_ == "neg") and (token.head.tag_ == "VB") and (token.head.lemma_ != "be"):
                 for c in token.head.children:
                     if c.lower_ == "did":
