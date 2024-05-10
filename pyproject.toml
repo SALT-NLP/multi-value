@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "multivalue"
 version = "0.1"
 authors = [
-  { name="Will Held", email="wheld3@gatech.edu" },
+  {name="Will Held", email="wheld3@gatech.edu"},
   {name="Caleb Ziems", email="cjziems@stanford.edu"}
 ]
 description = "A Framework for Cross-Dialectal NLP"
@@ -35,7 +35,7 @@ dependencies = [
 ]
 
 [tool.hatch.build]
-include = ["resources/*.json", "resources/*.txt", "resources/*.csv", "resources/*.tsv", "*.py"]
+include = ["resources/*.json", "resources/*.txt", "resources/*.csv", "resources/*.tsv", "src/"]
 dev-mode-dirs = [".", "src", "resources"]
 
 [tool.hatch.build.sources]
@@ -45,9 +45,12 @@ dev-mode-dirs = [".", "src", "resources"]
 [tool.hatch.metadata]
 allow-direct-references = true
 
-[tool.hatch.build.targets.wheel]
-packages = ["multivalue"]
 
+[tool.hatch.build.targets.wheel]
+only-include = ["src", "resources"]
+
+
+[tool.hatch.version]
 [project.urls]
 "Homepage" = "value-nlp.org"
 "Bug Tracker" = "https://github.com/SALT-NLP/multi-value/issues"
