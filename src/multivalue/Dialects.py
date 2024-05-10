@@ -292,7 +292,7 @@ class ScottishDialect(DialectFromVector):
         super().__init__(dialect_name="Scottish English", **kwargs)
 
 
-class SoutheastAmericanEnglaveDialect(DialectFromVector):
+class SoutheastAmericanEnclaveDialect(DialectFromVector):
     def __init__(self, **kwargs):
         super().__init__(dialect_name="Southeast American enclave dialects", **kwargs)
 

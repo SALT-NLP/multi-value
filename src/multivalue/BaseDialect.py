@@ -36,7 +36,7 @@ class BaseDialect(object):
         self.lexical_swaps = lexical_swaps
 
         self.nlp = spacy.load("en_core_web_sm")
-        self.coref = stanza.Pipeline("en", processors="tokenize,mwt,pos,lemma,depparse,coref")
+        self.coref = stanza.Pipeline("en", processors="tokenize,mwt,pos,lemma,depparse,coref", verbose=False)
         self.inflector = English()
         self.inflection = inflect.engine()
         self.cmudict = cmudict.dict()
