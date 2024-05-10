@@ -1,6 +1,18 @@
 # Multi-VALUE: The VernAcular Language Understanding Evaluation benchmark 
 
-## Setup
+
+## Setup From PyPi
+`pip install value-nlp`
+
+```python
+from multivalue import Dialects
+southern_am = Dialects.SoutheastAmericanEnclaveDialect()
+print(southern_am)
+print(southern_am.transform("I talked with them yesterday"))
+print(southern_am.executed_rules)
+```
+
+## Setup From Source
 ### Prerequisites: 
 * [anaconda](https://www.anaconda.com/products/individual)
 
