@@ -20,9 +20,7 @@ class DialectFromVector(BaseDialect):
         self.feature_id_to_function_name = self.load_dict(
             self.relatavize_file("resources/feature_id_to_function_name.json")
         )
-        self.attestation_vectors = pd.read_csv(
-            self.relatavize_file("resources/attestation_vectors.csv")
-        )
+        self.attestation_vectors = pd.read_csv(self.relatavize_file("resources/attestation_vectors.csv"))
 
         self.dialect_code = None
         self.latitude = None
@@ -54,9 +52,7 @@ class DialectFromVector(BaseDialect):
     def initialize_from_vector(self):
         for idx, feature_attestation in enumerate(self.vector):
             feature_id = str(idx)
-            if (feature_attestation) and (
-                feature_id in self.feature_id_to_function_name
-            ):
+            if (feature_attestation) and (feature_id in self.feature_id_to_function_name):
                 for feature_name in self.feature_id_to_function_name[feature_id]:
                     self.morphosyntax_transforms[feature_name] = feature_attestation
 
@@ -70,12 +66,8 @@ class DialectFromVector(BaseDialect):
 
     def geographical_distance(self, other, metric=True):
         if metric:
-            return geopy.distance.geodesic(
-                (self.latitude, self.longitude), (other.latitude, other.longitude)
-            ).km
-        return geopy.distance.geodesic(
-            (self.latitude, self.longitude), (other.latitude, other.longitude)
-        ).miles
+            return geopy.distance.geodesic((self.latitude, self.longitude), (other.latitude, other.longitude)).km
+        return geopy.distance.geodesic((self.latitude, self.longitude), (other.latitude, other.longitude)).miles
 
 
 class DialectFromFeatureList(BaseDialect):
@@ -110,9 +102,7 @@ class AboriginalDialect(DialectFromVector):
 
 class AfricanAmericanVernacular(DialectFromVector):
     def __init__(self, **kwargs):
-        super().__init__(
-            dialect_name="Urban African American Vernacular English", **kwargs
-        )
+        super().__init__(dialect_name="Urban African American Vernacular English", **kwargs)
 
 
 class AppalachianDialect(DialectFromVector):
@@ -167,16 +157,12 @@ class ColloquialAmericanDialect(DialectFromVector):
 
 class ColloquialSingaporeDialect(DialectFromVector):
     def __init__(self, **kwargs):
-        super().__init__(
-            dialect_name="Colloquial Singapore English (Singlish)", **kwargs
-        )
+        super().__init__(dialect_name="Colloquial Singapore English (Singlish)", **kwargs)
 
 
 class EarlyAfricanAmericanVernacular(DialectFromVector):
     def __init__(self, **kwargs):
-        super().__init__(
-            dialect_name="Earlier African American Vernacular English", **kwargs
-        )
+        super().__init__(dialect_name="Earlier African American Vernacular English", **kwargs)
 
 
 class EastAnglicanDialect(DialectFromVector):
@@ -271,9 +257,7 @@ class NigerianDialect(DialectFromVector):
 
 class NorthEnglandDialect(DialectFromVector):
     def __init__(self, **kwargs):
-        super().__init__(
-            dialect_name="English dialects in the North of England", **kwargs
-        )
+        super().__init__(dialect_name="English dialects in the North of England", **kwargs)
 
 
 class OrkneyShetlandDialect(DialectFromVector):
@@ -298,9 +282,7 @@ class PhilippineDialect(DialectFromVector):
 
 class RuralAfricanAmericanVernacular(DialectFromVector):
     def __init__(self, **kwargs):
-        super().__init__(
-            dialect_name="Rural African American Vernacular English", **kwargs
-        )
+        super().__init__(dialect_name="Rural African American Vernacular English", **kwargs)
 
 
 class ScottishDialect(DialectFromVector):
@@ -325,16 +307,12 @@ class StHelenaDialect(DialectFromVector):
 
 class SoutheastEnglandDialect(DialectFromVector):
     def __init__(self, **kwargs):
-        super().__init__(
-            dialect_name="English dialects in the Southeast of England", **kwargs
-        )
+        super().__init__(dialect_name="English dialects in the Southeast of England", **kwargs)
 
 
 class SouthwestEnglandDialect(DialectFromVector):
     def __init__(self, **kwargs):
-        super().__init__(
-            dialect_name="English dialects in the Southwest of England", **kwargs
-        )
+        super().__init__(dialect_name="English dialects in the Southwest of England", **kwargs)
 
 
 class TanzanianDialect(DialectFromVector):
