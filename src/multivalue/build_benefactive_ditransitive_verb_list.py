@@ -1,5 +1,6 @@
-from nltk.corpus import verbnet
 from collections import defaultdict
+
+from nltk.corpus import verbnet
 
 
 def get_theta_roles(ex):

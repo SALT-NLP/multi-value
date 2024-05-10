@@ -1,12 +1,16 @@
 import argparse
-import os, sys
-from tqdm import tqdm
-from .Dialects import AfricanAmericanVernacular, IndianDialect
-import pandas as pd
-import pickle as pkl
-from glob import glob
-import json
 import csv
+import json
+import os
+import pickle as pkl
+import sys
+from glob import glob
+
+import pandas as pd
+from tqdm import tqdm
+
+from .Dialects import AfricanAmericanVernacular, IndianDialect
+
 
 csv.field_size_limit(min(sys.maxsize, 2147483646))
 

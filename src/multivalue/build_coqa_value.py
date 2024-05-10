@@ -1,20 +1,23 @@
 import argparse
-import os, sys
+import csv
+import json
+import os
+import pickle as pkl
+import sys
+from glob import glob
+
+import numpy as np
+import pandas as pd
 from tqdm import tqdm
+
 from .Dialects import (
     AfricanAmericanVernacular,
-    IndianDialect,
-    ColloquialSingaporeDialect,
-    ChicanoDialect,
     AppalachianDialect,
+    ChicanoDialect,
+    ColloquialSingaporeDialect,
+    IndianDialect,
     MultiDialect,
 )
-import pandas as pd
-import numpy as np
-import pickle as pkl
-from glob import glob
-import json
-import csv
 
 
 def main():

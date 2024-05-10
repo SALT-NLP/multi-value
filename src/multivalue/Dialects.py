@@ -1,8 +1,10 @@
-from .BaseDialect import BaseDialect
 from collections import defaultdict
+
 import geopy.distance
 import numpy as np
 import pandas as pd
+
+from .BaseDialect import BaseDialect
 
 
 class DialectFromVector(BaseDialect):

@@ -1,7 +1,9 @@
-import glob, os
+import csv
+import glob
+import os
+
 import pandas as pd
 from Dialects import AfricanAmericanVernacular
-import csv
 
 
 def read_tsv(input_file, quotechar=None):

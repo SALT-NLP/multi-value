@@ -1,23 +1,26 @@
-from tqdm import tqdm
-from ast import literal_eval
-from collections import defaultdict, Counter
+import json
+import os
 import pickle as pkl
-import pandas as pd
-import numpy as np
-import json, re, os, spacy, nltk
-
-import lemminflect
 import random
+import re
 import string
-from nltk.corpus import wordnet as wn
-from collections import Counter
+from ast import literal_eval
+from collections import Counter, defaultdict
+
 import inflect
-from .inflect.english import English
+import lemminflect
+import nltk
+import numpy as np
+import pandas as pd
+import spacy
+import stanza
 from nltk.corpus import cmudict
 from nltk.corpus import wordnet as wn
 from nltk.metrics.distance import edit_distance
 from nltk.stem.wordnet import WordNetLemmatizer
-import stanza
+from tqdm import tqdm
+
+from .inflect.english import English
 
 
 class BaseDialect(object):
