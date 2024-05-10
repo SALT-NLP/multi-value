@@ -52,7 +52,7 @@ only-include = ["src", "resources"]
 
 [tool.hatch.version]
 [project.urls]
-"Homepage" = "value-nlp.org"
+"Homepage" = "https://value-nlp.org"
 "Bug Tracker" = "https://github.com/SALT-NLP/multi-value/issues"
 
 [tool.black]
