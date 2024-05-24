@@ -22,7 +22,6 @@ from tqdm import tqdm
 
 from .inflect.english import English
 
-
 class BaseDialect(object):
     def __init__(self, lexical_swaps={}, morphosyntax=True, seed=None):
         self.string = ""
@@ -1967,7 +1966,7 @@ class BaseDialect(object):
     def never_negator(self, name="never_negator"):
         # feature 159
         for token in self.tokens:
-            if (token.dep_ == "neg") and (token.head.tag_ == "VB") and (token.head.lemma_ != "be"):
+            if (token.dep_ == "neg") and (token.head.tag_ == "VBN") and (token.head.lemma_ != "be"):
                 for c in token.head.children:
                     if c.lower_ == "did":
                         num = self.get_verb_number(token.head)
@@ -2050,7 +2049,7 @@ class BaseDialect(object):
     ):
         wh = any([token.tag_ in {"WDT", "WP", "WP$", "WRB"} for token in self.tokens])
         for token in self.tokens:
-            if token.dep_ == "ROOT" and token.pos_ == "VERB":
+            if token.dep_ == "ROOT" and token.pos_ in {"VERB", "AUX"}:
                 subj = None
                 aux = None
                 multiple_aux = False
@@ -2630,7 +2629,7 @@ class BaseDialect(object):
     def for_complementizer(self):
         # feature 201
         for token in self.tokens:
-            if token.dep_ in {"ccomp", "xcomp"}:
+            if token.dep_ in {"ccomp", "xcomp", "advcl"}:
                 for child in token.children:
                     if child.dep_ == "mark" or child.tag_ == "TO":
                         self.set_rule(child, "for", "for_complementizer")
