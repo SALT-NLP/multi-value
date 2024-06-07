@@ -18,7 +18,7 @@ print(southern_am.executed_rules)
 
 1. Create a virtual environment
 ```bash
-conda create --name value python=3.7.13
+conda create --name value python=3.10.13
 conda activate value
 ```
 
