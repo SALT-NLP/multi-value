@@ -22,6 +22,7 @@ from tqdm import tqdm
 
 from .inflect.english import English
 
+
 class BaseDialect(object):
     def __init__(self, lexical_swaps={}, morphosyntax=True, seed=None):
         self.string = ""
@@ -1999,7 +2000,7 @@ class BaseDialect(object):
 
     def not_preverbal_negator(self):
         # feature 161
-        self.preverbal_negator(replace="not", name="no_preverbal_negator")
+        self.preverbal_negator(replace="not", name="not_preverbal_negator")
 
     def nomo_existential(self, name="nomo_existential"):
         # feature 162
